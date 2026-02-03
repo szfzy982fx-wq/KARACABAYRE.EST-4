@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KARACABAYRE.EST - v68 (No Pass + Universal Backup)</title>
+    <title>KARACABAYRE.EST - v69 (TXT Fix & Floor Fix)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -23,7 +23,7 @@
         }
         body { font-family: 'Segoe UI', sans-serif; background: #eef2f3; margin: 0; padding: 10px; color: #333; }
         
-        /* Ana Yapı - Şifre Ekranı Yok, Direkt Görünür */
+        /* Ana Yapı - Şifresiz */
         #appContainer { display: block; }
         .container { max-width: 1800px; margin: 0 auto; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         
@@ -155,7 +155,7 @@
         @media print { 
             body, .container, #appContainer { background-color: white !important; margin: 0; padding: 0; }
             .input-panel, .filter-bar, .backup-controls, .tools-bar, #loginOverlay, .no-print { display: none !important; } 
-            .badge-own, .badge-shared { display: none !important; } /* Sahiplik Gizle */
+            .badge-own, .badge-shared { display: none !important; } 
             
             .print-only { display: table-cell !important; } 
             #appContainer { display: block !important; } 
@@ -181,11 +181,11 @@
     <div class="container">
         <header>
             <div class="app-title-group">
-                <h1>🏢 KARACABAYRE.EST <span style="font-size:12px; color:#27ae60; border:1px solid #27ae60; padding:2px 8px; border-radius:10px; vertical-align:middle;">v68</span></h1>
+                <h1>🏢 KARACABAYRE.EST <span style="font-size:12px; color:#27ae60; border:1px solid #27ae60; padding:2px 8px; border-radius:10px; vertical-align:middle;">v69</span></h1>
                 <div class="app-subtitle">🏠 EMLAK ASİSTANI</div>
             </div>
             <div class="backup-controls">
-                <input type="file" id="fileUpload" style="display:none;" onclick="this.value=null" onchange="uploadData(this)">
+                <input type="file" id="fileUpload" style="display:none;" accept=".json, .txt, .text" onclick="this.value=null" onchange="uploadData(this)">
                 <button class="btn-backup" onclick="document.getElementById('fileUpload').click()"><i class="fa-solid fa-folder-open"></i> YÜKLE</button>
                 <button class="btn-backup" onclick="downloadData()"><i class="fa-solid fa-floppy-disk"></i> YEDEKLE</button>
             </div>
@@ -228,6 +228,7 @@
                 <div class="form-group"><label>Oda</label><input type="text" id="inpRooms" placeholder="3+1"></div>
                 
                 <div class="form-group"><label>Kat</label><select id="inpFloor"></select></div>
+                
                 <div class="form-group"><label>Kat Sayısı</label><input type="number" id="inpFloorCount"></div>
                 <div class="form-group"><label>Brüt m²</label><input type="number" id="inpGross"></div>
                 <div class="form-group"><label>Net m²</label><input type="number" id="inpNet"></div>
@@ -311,7 +312,7 @@
             </thead>
             <tbody id="tableBody"></tbody>
         </table>
-        <div class="legal-footer" style="margin-top:20px; font-size:12px; color:#aaa; text-align:center;">Veriler yerel tarayıcıda saklanır. (v68)</div>
+        <div class="legal-footer" style="margin-top:20px; font-size:12px; color:#aaa; text-align:center;">Veriler yerel tarayıcıda saklanır. (v69)</div>
     </div>
 </div>
 
@@ -505,9 +506,7 @@
 </div>
 
 <script>
-    const antalyaData = { "Akseki": ["Merkez"], "Aksu": ["Merkez","Altıntaş","Kundu","Pınarlı","Macun"], "Alanya": ["Merkez","Mahmutlar","Avsallar","Oba","Kestel"], "Demre": ["Merkez"], "Döşemealtı": ["Merkez","Yeniköy","Yeşilbayır","Altınkale"], "Elmalı": ["Merkez"], "Finike": ["Merkez"], "Gazipaşa": ["Merkez"], "Gündoğmuş": ["Merkez"], "İbradı": ["Merkez"], "Kaş": ["Merkez","Kalkan"], "Kemer": ["Merkez","Göynük","Beldibi","Tekirova"], "Kepez": ["Merkez","Varsak","Sütçüler","Gülveren","Kültür"], "Konyaaltı": ["Merkez","Liman","Hurma","Uncalı","Gürsu","Sarısu"], "Korkuteli": ["Merkez"], "Kumluca": ["Merkez","Mavikent","Adrasan"], "Manavgat": ["Merkez","Side","Sorgun","Ilıca"], "Muratpaşa": ["Merkez","Lara","Fener","Şirinyalı","Kırcami","Meltem"], "Serik": ["Merkez","Belek","Kadriye","Boğazkent"] };
-    const turkiyeData = { "Adana": [], "Adıyaman": [], "Afyonkarahisar": [], "Ağrı": [], "Aksaray": [], "Amasya": [], "Ankara": ["Çankaya","Keçiören","Yenimahalle","Mamak","Etimesgut","Sincan","Altındağ","Pursaklar","Gölbaşı"], "Antalya": Object.keys(antalyaData).sort(), "Ardahan": [], "Artvin": [], "Aydın": [], "Balıkesir": [], "Bartın": [], "Batman": [], "Bayburt": [], "Bilecik": [], "Bingöl": [], "Bitlis": [], "Bolu": [], "Burdur": [], "Bursa": [], "Çanakkale": [], "Çankırı": [], "Çorum": [], "Denizli": [], "Diyarbakır": [], "Düzce": [], "Edirne": [], "Elazığ": [], "Erzincan": [], "Erzurum": [], "Eskişehir": [], "Gaziantep": [], "Giresun": [], "Gümüşhane": [], "Hakkari": [], "Hatay": [], "Iğdır": [], "Isparta": [], "İstanbul": ["Esenyurt","Küçükçekmece","Bağcılar","Ümraniye","Pendik","Bahçelievler","Üsküdar","Kadıköy","Kartal","Gaziosmanpaşa","Şişli","Beşiktaş","Sarıyer","Fatih"], "İzmir": ["Buca","Karabağlar","Bornova","Karşıyaka","Konak","Bayraklı","Çiğli","Menemen","Torbalı"], "Kahramanmaraş": [], "Karabük": [], "Karaman": [], "Kars": [], "Kastamonu": [], "Kayseri": [], "Kırıkkale": [], "Kırklareli": [], "Kırşehir": [], "Kilis": [], "Kocaeli": [], "Konya": [], "Kütahya": [], "Malatya": [], "Manisa": [], "Mardin": [], "Mersin": [], "Muğla": ["Bodrum","Fethiye","Marmaris","Datça","Menteşe","Milas"], "Muş": [], "Nevşehir": [], "Niğde": [], "Ordu": [], "Osmaniye": [], "Rize": [], "Sakarya": [], "Samsun": [], "Siirt": [], "Sinop": [], "Sivas": [], "Şanlıurfa": [], "Şırnak": [], "Tekirdağ": [], "Tokat": [], "Trabzon": [], "Tunceli": [], "Uşak": [], "Van": [], "Yalova": [], "Yozgat": [], "Zonguldak": [] };
-
+    // VERİLER - DÜZELTME: floorList'i en başa alıp global yaptım
     const floorList = [
         "Giriş Altı Kot 4", "Giriş Altı Kot 3", "Giriş Altı Kot 2", "Giriş Altı Kot 1",
         "Bodrum Kat", "Zemin Kat", 
@@ -518,6 +517,9 @@
     for (let i = 1; i <= 30; i++) { floorList.push(i.toString()); }
     floorList.push("30+");
     floorList.push("Çatı Dubleks");
+
+    const antalyaData = { "Akseki": ["Merkez"], "Aksu": ["Merkez","Altıntaş","Kundu","Pınarlı","Macun"], "Alanya": ["Merkez","Mahmutlar","Avsallar","Oba","Kestel"], "Demre": ["Merkez"], "Döşemealtı": ["Merkez","Yeniköy","Yeşilbayır","Altınkale"], "Elmalı": ["Merkez"], "Finike": ["Merkez"], "Gazipaşa": ["Merkez"], "Gündoğmuş": ["Merkez"], "İbradı": ["Merkez"], "Kaş": ["Merkez","Kalkan"], "Kemer": ["Merkez","Göynük","Beldibi","Tekirova"], "Kepez": ["Merkez","Varsak","Sütçüler","Gülveren","Kültür"], "Konyaaltı": ["Merkez","Liman","Hurma","Uncalı","Gürsu","Sarısu"], "Korkuteli": ["Merkez"], "Kumluca": ["Merkez","Mavikent","Adrasan"], "Manavgat": ["Merkez","Side","Sorgun","Ilıca"], "Muratpaşa": ["Merkez","Lara","Fener","Şirinyalı","Kırcami","Meltem"], "Serik": ["Merkez","Belek","Kadriye","Boğazkent"] };
+    const turkiyeData = { "Adana": [], "Adıyaman": [], "Afyonkarahisar": [], "Ağrı": [], "Aksaray": [], "Amasya": [], "Ankara": ["Çankaya","Keçiören","Yenimahalle","Mamak","Etimesgut","Sincan","Altındağ","Pursaklar","Gölbaşı"], "Antalya": Object.keys(antalyaData).sort(), "Ardahan": [], "Artvin": [], "Aydın": [], "Balıkesir": [], "Bartın": [], "Batman": [], "Bayburt": [], "Bilecik": [], "Bingöl": [], "Bitlis": [], "Bolu": [], "Burdur": [], "Bursa": [], "Çanakkale": [], "Çankırı": [], "Çorum": [], "Denizli": [], "Diyarbakır": [], "Düzce": [], "Edirne": [], "Elazığ": [], "Erzincan": [], "Erzurum": [], "Eskişehir": [], "Gaziantep": [], "Giresun": [], "Gümüşhane": [], "Hakkari": [], "Hatay": [], "Iğdır": [], "Isparta": [], "İstanbul": ["Esenyurt","Küçükçekmece","Bağcılar","Ümraniye","Pendik","Bahçelievler","Üsküdar","Kadıköy","Kartal","Gaziosmanpaşa","Şişli","Beşiktaş","Sarıyer","Fatih"], "İzmir": ["Buca","Karabağlar","Bornova","Karşıyaka","Konak","Bayraklı","Çiğli","Menemen","Torbalı"], "Kahramanmaraş": [], "Karabük": [], "Karaman": [], "Kars": [], "Kastamonu": [], "Kayseri": [], "Kırıkkale": [], "Kırklareli": [], "Kırşehir": [], "Kilis": [], "Kocaeli": [], "Konya": [], "Kütahya": [], "Malatya": [], "Manisa": [], "Mardin": [], "Mersin": [], "Muğla": ["Bodrum","Fethiye","Marmaris","Datça","Menteşe","Milas"], "Muş": [], "Nevşehir": [], "Niğde": [], "Ordu": [], "Osmaniye": [], "Rize": [], "Sakarya": [], "Samsun": [], "Siirt": [], "Sinop": [], "Sivas": [], "Şanlıurfa": [], "Şırnak": [], "Tekirdağ": [], "Tokat": [], "Trabzon": [], "Tunceli": [], "Uşak": [], "Van": [], "Yalova": [], "Yozgat": [], "Zonguldak": [] };
 
     const typeList = ["Daire","Villa","Proje","Arsa","İşyeri","Devre Mülk","Turistik Tesis","Otel","Komple Bina","Bahçe","Tarla","Zeytinlik"];
 
@@ -540,7 +542,37 @@
         initImarLinks();
     };
 
-    // --- YENİDEN YAZILMIŞ AKILLI YÜKLEME MODÜLÜ (v68 Fix) ---
+    // --- POPULATE SELECTS (KAT DÜZELTMESİ) ---
+    function populateSelects() { 
+        const iC = document.getElementById('inpCity'); 
+        const fC = document.getElementById('filterCity');
+        iC.innerHTML = '<option value="Antalya">Antalya</option>'; 
+        fC.innerHTML = '<option value="all">Tüm İller</option><option value="Antalya">Antalya</option>';
+        Object.keys(turkiyeData).sort().forEach(city => { 
+            if(city !== "Antalya") { 
+                iC.innerHTML += `<option value="${city}">${city}</option>`; 
+                fC.innerHTML += `<option value="${city}">${city}</option>`; 
+            }
+        });
+        handleCityChange('inpCity', 'inpDistrict', 'dl_mahalle_ekle'); 
+        fC.value = "Antalya"; 
+        handleCityChange('filterCity', 'filterDistrict', 'dl_mahalle_filtre');
+        
+        const tS=document.getElementById('inpType'), fT=document.getElementById('filterType'); 
+        typeList.forEach(t=>{tS.innerHTML+=`<option>${t}</option>`;fT.innerHTML+=`<option>${t}</option>`;});
+        
+        // DÜZELTME: Kat listesini doldurma kodu
+        const fL = document.getElementById('inpFloor');
+        fL.innerHTML = ''; // Temizle
+        floorList.forEach(f => {
+            const opt = document.createElement('option');
+            opt.value = f;
+            opt.innerText = f;
+            fL.appendChild(opt);
+        });
+    }
+
+    // --- YENİDEN YAZILMIŞ AKILLI YÜKLEME MODÜLÜ (v69 TXT Fix) ---
     function saveToDisk() { 
         localStorage.setItem('KaracabayRE_EST_DB_v19', JSON.stringify(portfolio)); 
         localStorage.setItem('KaracabayRE_CRM_v19', JSON.stringify(crmData));
@@ -565,18 +597,18 @@
                 const d = JSON.parse(raw);
                 
                 // --- FORMAT ALGILAMA ---
-                // Eski Format (Sadece Array)
+                // Eski Format (Sadece Array) - TXT dosyanız muhtemelen bu formatta olabilir veya obje içinde array
                 if (Array.isArray(d)) {
-                    if(confirm("Eski format (v56) yedek dosyası algılandı. Yüklensin mi?")) {
+                    if(confirm("Eski format (Liste) yedek dosyası algılandı. Yüklensin mi?")) {
                         portfolio = d;
-                        if(!crmData.investors) crmData = { investors: [], network: [] };
+                        if(!crmData || !crmData.investors) crmData = { investors: [], network: [] };
                         if(!checklist) checklist = [];
                         if(!imarLinks) imarLinks = [];
                         saveToDisk();
                         window.location.reload();
                     }
                 } 
-                // Yeni Format (Obje içinde portfolio, crm vb.)
+                // Yeni Format (Obje içinde portfolio) - TXT dosyanız bu formatta da olabilir
                 else if (d.portfolio || d.crm) {
                     if(confirm("Güncel format yedek dosyası algılandı. Yüklensin mi?")) {
                         if(d.portfolio && Array.isArray(d.portfolio)) portfolio = d.portfolio;
@@ -588,10 +620,10 @@
                     }
                 } 
                 else {
-                    alert("HATA: Dosya formatı tanınamadı. Lütfen geçerli bir yedek dosyası seçin.");
+                    alert("HATA: Dosya formatı tanınamadı.");
                 }
             } catch(err) { 
-                alert("Dosya okuma hatası: " + err); 
+                alert("Dosya okuma hatası! Lütfen geçerli bir yedek dosyası (.txt veya .json) seçtiğinizden emin olun.\nDetay: " + err); 
             }
             input.value = ''; 
         }; 
