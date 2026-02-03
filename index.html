@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KARACABAYRE.EST - v63 (Final Layout)</title>
+    <title>KARACABAYRE.EST - v64 (CRM Fix + Layout)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -58,13 +58,27 @@
         .currency-group select { width: 70px; flex-shrink: 0; background: #eee; font-weight: bold; }
         .auth-box { grid-column: span 2; display: flex; gap: 10px; background: #eafaf1; padding: 10px; border: 1px dashed var(--accent); border-radius: 6px; }
         
-        /* YENİ BUTON VE AÇIKLAMA DÜZENİ (İstenen Yapı) */
-        .form-footer-row { grid-column: span 2; display: flex; align-items: flex-end; gap: 10px; margin-top: 5px; }
-        .desc-container { flex-grow: 1; } /* Açıklama alanı kalan boşluğu doldurur */
-        .action-container { flex-shrink: 0; display: flex; gap:5px; } /* Butonlar sağa yapışır */
-        
-        .btn-save { background: var(--accent); color: white; border: none; padding: 10px 30px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 14px; height: 42px; display: flex; align-items: center; justify-content: center; }
-        .btn-delete-rec { background: var(--danger); color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer; font-weight: bold; display: none; height: 42px; }
+        /* YENİ ALT SATIR DÜZENİ (Link - Açıklama - Kaydet) */
+        .form-bottom-row {
+            grid-column: 1 / -1; /* Tüm genişliği kapla */
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #eee;
+        }
+        .form-bottom-item {
+            flex: 1; /* Link ve Açıklama eşit genişlik */
+        }
+        .form-bottom-action {
+            flex: 0 0 auto; /* Buton içeriği kadar yer kaplasın */
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-save { background: var(--accent); color: white; border: none; padding: 0 30px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 14px; height: 42px; display: flex; align-items: center; justify-content: center; white-space: nowrap; }
+        .btn-delete-rec { background: var(--danger); color: white; border: none; padding: 0 15px; border-radius: 4px; cursor: pointer; font-weight: bold; display: none; height: 42px; }
         .btn-cancel { background: #7f8c8d; color: white; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; display: none; margin-left: auto; }
 
         /* Tablo */
@@ -93,10 +107,9 @@
         .btn-clear-filter { background: #95a5a6; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; margin-left: auto; }
         .btn-print-selected { background: #8e44ad; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; display:flex; align-items:center; gap:5px; font-size: 11px; }
         .btn-whatsapp-selected { background: var(--whatsapp); color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; display:flex; align-items:center; gap:5px; font-size: 11px; }
-        /* Yeni Excel Butonu (Filtre İçinde) */
         .btn-excel { background: #217346; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; display:flex; align-items:center; gap:5px; font-size: 11px; }
 
-        /* CRM Badges (v56 Standartları) */
+        /* CRM Badges */
         .badge-crm-safe { background: #27ae60; color:white; font-size:12px; padding:6px 10px; border-radius:4px; display:inline-block; min-width:80px; text-align:center; }
         .badge-crm-danger { background: #c0392b; color:white; font-size:13px; font-weight:900; padding:6px 10px; border-radius:4px; display:inline-block; min-width:80px; text-align:center; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
@@ -123,19 +136,23 @@
         .tab-btn.active { border-bottom-color: var(--secondary); color: var(--secondary); font-weight: bold; }
         .tab-content { display: none; } .tab-content.active { display: block; }
         
-        /* CRM Özel Stiller (v56) */
+        /* CRM Style (v56 + Fixes) */
         .crm-header { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; overflow-x: auto; }
         .crm-tab { padding: 10px 20px; cursor: pointer; font-weight: bold; border-radius: 6px; border: 1px solid #eee; background: #f9f9f9; white-space: nowrap; }
         .crm-tab.active { background: var(--accent); color: white; border-color: var(--accent); }
         .crm-input-panel { background: #f1f2f6; padding: 15px; border-radius: 6px; margin-bottom: 15px; border-left: 5px solid var(--accent); }
+        /* CRM Input Grid genişletildi */
         .crm-input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
         .crm-buttons { display: flex; gap: 10px; margin-top: 15px; }
-
+        /* CRM Tablo Taşıyıcı Yüksekliği Sabitlendi ve Scroll Eklendi */
+        .crm-table-container { max-height: 400px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px; }
+        
         .print-only { display: none; }
 
         @media screen and (max-width: 900px) {
-            .form-footer-row { flex-direction: column; align-items: stretch; }
-            .btn-save { width: 100%; margin-top: 5px; }
+            .form-bottom-row { flex-direction: column; align-items: stretch; gap:10px; }
+            .form-bottom-action { width: 100%; justify-content: flex-end; }
+            .btn-save { width: 100%; }
             .select-col-header, .select-col-cell { width: 20px !important; }
         }
 
@@ -155,7 +172,7 @@
 <div id="loginOverlay">
     <div class="login-box">
         <h2>🔒 GÜVENLİ GİRİŞ</h2>
-        <p>KaracabayRE.EST v63</p>
+        <p>KaracabayRE.EST v64</p>
         <input type="password" id="loginPin" placeholder="Şifre (1923)" inputmode="numeric">
         <button onclick="checkLogin()">GİRİŞ YAP</button>
     </div>
@@ -165,8 +182,8 @@
     <div class="container">
         <header>
             <div class="app-title-group">
-                <h1>🏢 KARACABAYRE.EST <span style="font-size:12px; color:#27ae60; border:1px solid #27ae60; padding:2px 8px; border-radius:10px; vertical-align:middle;">v63</span></h1>
-                <div class="app-subtitle">🏠 EMLAK ASİSTANI (OPTİMİZE)</div>
+                <h1>🏢 KARACABAYRE.EST <span style="font-size:12px; color:#27ae60; border:1px solid #27ae60; padding:2px 8px; border-radius:10px; vertical-align:middle;">v64</span></h1>
+                <div class="app-subtitle">🏠 EMLAK ASİSTANI</div>
             </div>
             <div class="backup-controls">
                 <input type="file" id="fileUpload" style="display:none;" onclick="this.value=null" onchange="uploadData(this)">
@@ -228,14 +245,16 @@
                 <div class="form-group"><label>Müşteri Ad Soyad</label><input type="text" id="inpRef"></div>
                 <div class="form-group"><label>Müşteri Telefon</label><input type="text" id="inpPhone" placeholder="0 (5XX)..." maxlength="17" oninput="formatPhone(this)"></div>
                 
-                <div class="form-group"><label>Dosya / Link</label><textarea id="inpLink" placeholder="Linkler..." rows="1" class="auto-expand" oninput="autoResize(this)"></textarea></div>
-
-                <div class="form-footer-row">
-                    <div class="form-group desc-container">
+                <div class="form-bottom-row">
+                    <div class="form-group form-bottom-item">
+                        <label>Dosya / Link</label>
+                        <textarea id="inpLink" placeholder="Linkler..." class="auto-expand" style="height:42px;"></textarea>
+                    </div>
+                    <div class="form-group form-bottom-item">
                         <label>Açıklama</label>
                         <textarea id="inpDesc" class="auto-expand" placeholder="Detaylar..." oninput="autoResize(this)" style="height:42px;"></textarea>
                     </div>
-                    <div class="action-container">
+                    <div class="form-bottom-action">
                         <button id="btnSave" class="btn-save" onclick="handleSave()">KAYDET</button>
                         <button id="btnDelete" class="btn-delete-rec" onclick="deleteFromForm()">SİL</button>
                     </div>
@@ -260,7 +279,7 @@
             <input type="text" id="filterMaxPrice" placeholder="Max" oninput="formatCurrency(this); renderTable()" style="width:60px;">
             <button class="btn-clear-filter" onclick="clearFilters()"><i class="fa-solid fa-rotate-left"></i></button>
             
-            <button class="btn-excel" onclick="exportToExcel()">
+            <button class="btn-excel" onclick="exportSelectedToExcel()">
                 <i class="fa-solid fa-file-excel"></i> KAYDET EXCEL
             </button>
             
@@ -293,7 +312,7 @@
             </thead>
             <tbody id="tableBody"></tbody>
         </table>
-        <div class="legal-footer" style="margin-top:20px; font-size:12px; color:#aaa; text-align:center;">Veriler yerel tarayıcıda saklanır. (v63)</div>
+        <div class="legal-footer" style="margin-top:20px; font-size:12px; color:#aaa; text-align:center;">Veriler yerel tarayıcıda saklanır. (v64)</div>
     </div>
 </div>
 
@@ -351,7 +370,7 @@
                     <button id="btnInvCancel" class="btn-cancel" onclick="resetCRMForm('investors')">İPTAL</button>
                 </div>
             </div>
-            <div class="table-scroll-wrapper">
+            <div class="crm-table-container">
                 <table class="crm-table">
                     <thead><tr><th width="15%">Ad Soyad</th><th width="12%">Telefon</th><th width="20%">Talep / Bölge</th><th width="13%">Bütçe</th><th width="10%">Durum</th><th width="20%">Notlar</th><th width="10%">İşlem</th></tr></thead>
                     <tbody id="investorTableBody"></tbody>
@@ -375,7 +394,7 @@
                     <button id="btnNetCancel" class="btn-cancel" onclick="resetCRMForm('network')">İPTAL</button>
                 </div>
             </div>
-            <div class="table-scroll-wrapper">
+            <div class="crm-table-container">
                 <table class="crm-table">
                     <thead><tr><th width="16%">Ad Soyad</th><th width="12%">Meslek/Şehir</th><th width="12%">Telefon</th><th width="10%">Yakınlık</th><th width="10%">Son Arama</th><th width="8%">Durum</th><th width="14%">Notlar</th><th width="18%">İşlem</th></tr></thead>
                     <tbody id="networkTableBody"></tbody>
@@ -690,13 +709,12 @@
         setTimeout(function() { window.print(); setTimeout(function() { document.body.classList.remove('print-selected-mode'); }, 2000); }, 100);
     }
     
-    // WHATSAPP GÜNCELLEMESİ (Net m2 ve İl Filtresi)
+    // WHATSAPP GÜNCELLEMESİ (SADECE NET M2)
     function sendSelectedToWhatsapp() {
         const selectedCheckboxes = document.querySelectorAll('.row-selected input[type="checkbox"]');
         if(selectedCheckboxes.length === 0) { alert("Lütfen portföy seçin."); return; }
         let msg = "*📢 SEÇİLEN PORTFÖYLER*\n\n";
         
-        // Filtredeki şehir seçimi
         const filterCityVal = document.getElementById('filterCity').value;
         
         selectedCheckboxes.forEach(cb => {
@@ -709,8 +727,10 @@
                     const item = portfolio.find(p => p.id === id);
                     if(item) {
                         const cityToUse = (filterCityVal !== 'all') ? filterCityVal : (item.city || 'Antalya');
-                        // NET M2 BİLGİSİ EKLENDİ
-                        msg += `🏠 *${item.status} ${item.type}*\n📍 ${cityToUse} / ${item.district} / ${item.neighborhood}\n🔢 ${item.rooms} | 📏 NET ${item.net} m² | 💰 ${item.price} ${item.currency||'₺'}\n-------------------\n`;
+                        // NET M2 BİLGİSİ DÜZELTİLDİ: Sadece 'NET X m2' şeklinde
+                        const netInfo = item.net ? ` | 📏 NET ${item.net} m²` : '';
+                        
+                        msg += `🏠 *${item.status} ${item.type}*\n📍 ${cityToUse} / ${item.district} / ${item.neighborhood}\n🔢 ${item.rooms}${netInfo} | 💰 ${item.price} ${item.currency||'₺'}\n-------------------\n`;
                     }
                 }
             }
@@ -718,29 +738,37 @@
         window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
     }
     
-    // EXCEL EXPORT (Filtreli Veriyi Alır)
-    function exportToExcel() {
-        // Tabloyu kopyala (butonları vb. hariç tutmak için)
+    // EXCEL EXPORT (SADECE SEÇİLENLER)
+    function exportSelectedToExcel() {
+        // Kontrol: Hiç seçim yapılmış mı?
+        const selectedRows = document.querySelectorAll('#tableBody tr.row-selected');
+        if(selectedRows.length === 0) {
+            alert("⚠️ Lütfen Excel'e aktarmak istediğiniz kayıtları soldaki kutucuktan seçin.");
+            return;
+        }
+
+        // Tabloyu klonla
         let originalTable = document.getElementById("portfolioTable");
         let tableClone = originalTable.cloneNode(true);
         
-        // Sadece görünür satırları al (Filtreye uygun olanlar)
-        // Orijinal tablodaki satırların display özelliğini kontrol et
-        // Ancak cloneNode stili kopyalamaz, bu yüzden manuel bir filtreleme yaparız
-        
-        // Clone üzerinde temizlik
+        // Temizlik döngüsü
+        // Tersten giderek silme işlemi yapalım
         for (let i = tableClone.rows.length - 1; i >= 0; i--) {
             let row = tableClone.rows[i];
             
-            // Eğer header değilse ve orijinal tabloda bu satır gizliyse (display:none), Excel'den çıkar
-            if(i > 0) { // Header hariç
-                // Orijinal satırı bul (index değişmediği için aynı indexte olmalı, ama tbody içinde)
-                // Daha güvenli yol: Orijinal tablonun rows koleksiyonuna bakmak
-                 let originalRow = originalTable.rows[i];
-                 if(originalRow.style.display === 'none') {
-                     tableClone.deleteRow(i);
-                     continue;
-                 }
+            // Header (i=0) kalsın. 
+            if(i > 0) {
+                // Eğer orijinal satırda 'row-selected' sınıfı YOKSA, klondan sil
+                // Orijinal satırı bulmak için tbody içindeki indexi kullanıyoruz
+                // tableClone.rows header dahil tüm satırları içerir.
+                // Orijinal tablo ile index eşleşmesi için tbody'ye bakmak daha güvenli ama
+                // burada basitçe klon üzerinde class kontrolü yapamayız çünkü klon DOM'da değil ve dinamik değil.
+                // Klonlama anında classlar gelir.
+                
+                if(!row.classList.contains('row-selected')) {
+                    tableClone.deleteRow(i);
+                    continue;
+                }
             }
             
             // Hücre temizliği (Butonları sil)
@@ -750,7 +778,7 @@
                row.deleteCell(8);  // Link
                row.deleteCell(0);  // Checkbox
                
-               // İçerik temizliği
+               // İçerik temizliği (Satır sonlarını boşluk yap)
                for(let cell of row.cells) {
                    cell.innerText = cell.innerText.replace(/\n/g, ' ').trim();
                }
@@ -763,7 +791,7 @@
         link.href = uri;
         link.style = "visibility:hidden";
         let dateStr = new Date().toISOString().split('T')[0];
-        link.download = "Karacabay_Portfoy_" + dateStr + ".xls";
+        link.download = "Karacabay_Secilenler_" + dateStr + ".xls";
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -930,7 +958,7 @@
         const fL=document.getElementById('inpFloor'); floorList.forEach(f=>fL.innerHTML+=`<option>${f}</option>`); 
     }
 
-    // CRM (v56 Logic - Restore Edildi)
+    // CRM
     function openCRM() { openModal('crmModal'); renderInvestors(); renderNetwork(); document.getElementById('netLastCall').valueAsDate = new Date(); }
     function switchCRMTab(tab) { document.querySelectorAll('.crm-section').forEach(s => s.style.display = 'none'); document.querySelectorAll('.crm-tab').forEach(t => t.classList.remove('active')); if(tab === 'investors') { document.getElementById('crmInvestors').style.display = 'block'; document.getElementById('tab1').classList.add('active'); } else { document.getElementById('crmNetwork').style.display = 'block'; document.getElementById('tab2').classList.add('active'); } resetCRMForm('investors'); resetCRMForm('network'); }
     
@@ -948,7 +976,6 @@
         }); 
     }
     
-    // CRM Network (v56 Logic: 45 gün uyarısı)
     function renderNetwork() { 
         const tbody = document.getElementById('networkTableBody'); tbody.innerHTML = ''; const today = new Date(); 
         crmData.network.forEach(net => { 
