@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>EMLAK PORTFÖY ASİSTANI - v72</title>
+    <title>EMLAK PORTFÖY ASİSTANI - v73</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -211,7 +211,7 @@
     <div class="container">
         <header>
             <div class="app-title-group">
-                <h1>🏢 EMLAK PORTFÖY ASİSTANI <span style="font-size:12px; color:#27ae60; border:1px solid #27ae60; padding:2px 8px; border-radius:10px; vertical-align:middle;">v72</span></h1>
+                <h1>🏢 EMLAK PORTFÖY ASİSTANI <span style="font-size:12px; color:#27ae60; border:1px solid #27ae60; padding:2px 8px; border-radius:10px; vertical-align:middle;">v73</span></h1>
                 <div class="app-subtitle">Profesyonel Emlak Yönetim Sistemi</div>
             </div>
             
@@ -358,7 +358,7 @@
             </thead>
             <tbody id="tableBody"></tbody>
         </table>
-        <div class="legal-footer" style="margin-top:20px; font-size:12px; color:#aaa; text-align:center;">Veriler yerel tarayıcıda saklanır. (v72)</div>
+        <div class="legal-footer" style="margin-top:20px; font-size:12px; color:#aaa; text-align:center;">Veriler yerel tarayıcıda saklanır. (v73)</div>
     </div>
 </div>
 
@@ -534,19 +534,19 @@
         <div id="tabTapu" class="tab-content active">
             <div class="form-group"><label>Satış Bedeli (TL)</label><input type="text" id="calcPriceComp" placeholder="5.000.000" oninput="formatCurrency(this)"></div>
             <button class="btn-save" style="width:100%; margin-top:10px;" onclick="calcTapuKomisyon()">HESAPLA</button>
-            <div id="resTapu" style="margin-top:10px; font-size:13px; font-weight:bold; display:none;"></div>
+            <div id="resTapu" style="margin-top:10px; font-size:13px; font-weight:bold; display:none; background:#f9f9f9; padding:10px; border-radius:4px;"></div>
         </div>
         <div id="tabEmsal" class="tab-content">
             <div class="form-group"><label>Arsa (m²)</label><input type="text" id="calcArsaM2" oninput="formatCurrency(this)"></div>
             <div class="form-group"><label>KAKS / Emsal</label><input type="text" id="calcKaks" placeholder="1.5"></div>
             <button class="btn-save" style="width:100%; margin-top:10px;" onclick="calcEmsal()">HESAPLA</button>
-            <div id="resEmsal" style="margin-top:10px; font-weight:bold; display:none;"></div>
+            <div id="resEmsal" style="margin-top:10px; font-weight:bold; display:none; background:#f9f9f9; padding:10px; border-radius:4px;"></div>
         </div>
         <div id="tabVergi" class="tab-content">
             <div class="form-group"><label>Tür</label><select id="calcVergiType"><option value="0.002">Konut (B.Şehir)</option><option value="0.004">İşyeri (B.Şehir)</option><option value="0.006">Arsa (B.Şehir)</option></select></div>
             <div class="form-group"><label>Rayiç Bedel</label><input type="text" id="calcVergiDeger" oninput="formatCurrency(this)"></div>
             <button class="btn-save" style="width:100%; margin-top:5px;" onclick="calcEmlakVergisi()">HESAPLA</button>
-            <div id="resVergi" style="margin-top:10px; font-weight:bold; display:none;"></div>
+            <div id="resVergi" style="margin-top:10px; font-weight:bold; display:none; background:#f9f9f9; padding:10px; border-radius:4px;"></div>
         </div>
     </div>
 </div>
@@ -715,34 +715,70 @@
     function calculateCurrencyTotal() { let amount = parseFloat(document.getElementById('calcCurrAmount').value); let type = document.getElementById('calcCurrType').value; let rate = type === 'USD' ? parseFloat(document.getElementById('usdRate').value) : parseFloat(document.getElementById('eurRate').value); if(!amount || !rate) return; document.getElementById('currResText').innerText = (amount * rate).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " TL"; document.getElementById('currencyTotalRes').style.display = 'block'; }
     function switchTab(id) { document.querySelectorAll('.tab-content').forEach(d => d.style.display='none'); document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); document.getElementById(id).style.display = 'block'; event.currentTarget.classList.add('active'); }
     
-    // --- DÜZELTİLEN EMLAK HESAPLAMA FONKSİYONLARI ---
-    // Artık parsePrice ile metni sayıya çeviriyoruz, böylece "5.000.000" gibi değerler bozulmuyor.
+    // --- DÜZELTİLEN EMLAK HESAPLAMA FONKSİYONLARI (v73) ---
     function calcTapuKomisyon() { 
-        let p = parsePrice(document.getElementById('calcPriceComp').value); 
-        if(!p) return; 
+        let rawVal = document.getElementById('calcPriceComp').value;
+        let p = parsePrice(rawVal);
+        
+        // Hata kontrolü: Değer yoksa uyarı ver
+        if(!p || p <= 0) {
+            document.getElementById('resTapu').innerHTML = "<span style='color:red;'>Lütfen geçerli bir satış bedeli giriniz.</span>";
+            document.getElementById('resTapu').style.display = 'block';
+            return; 
+        }
+
         let tapu = p * 0.04; 
-        let kom = p * 0.02 * 1.20; 
-        document.getElementById('resTapu').innerHTML = `<strong>Tapu (%4):</strong> ${(p*0.04).toLocaleString()} TL<br><strong>Komisyon (%2+KDV):</strong> ${kom.toLocaleString()} TL`; 
+        let hizmet = p * 0.02; 
+        let kdv = hizmet * 0.20;
+        let topHizmet = hizmet + kdv;
+
+        document.getElementById('resTapu').innerHTML = 
+            `Tapu Harcı (%4): <b>${tapu.toLocaleString('tr-TR')} TL</b><br>` +
+            `Hizmet Bedeli (%2): <b>${hizmet.toLocaleString('tr-TR')} TL</b><br>` +
+            `KDV (%20): <b>${kdv.toLocaleString('tr-TR')} TL</b><br>` +
+            `--------------------------<br>` +
+            `TOPLAM KOMİSYON: <b style='color:#c0392b'>${topHizmet.toLocaleString('tr-TR')} TL</b>`;
+            
         document.getElementById('resTapu').style.display = 'block'; 
     }
     
     function calcEmsal() { 
         let m2 = parsePrice(document.getElementById('calcArsaM2').value); 
         let kaks = parseFloat(document.getElementById('calcKaks').value); 
-        if(!m2 || !kaks) return; 
+        
+        if(!m2 || !kaks) {
+             document.getElementById('resEmsal').innerHTML = "<span style='color:red;'>Lütfen m² ve emsal giriniz.</span>";
+             document.getElementById('resEmsal').style.display = 'block';
+             return;
+        }
+
         document.getElementById('resEmsal').innerHTML = `İnşaat Alanı: <strong>${(m2*kaks).toLocaleString()} m²</strong>`; 
         document.getElementById('resEmsal').style.display = 'block'; 
     }
     
     function calcEmlakVergisi() { 
-        let val = parsePrice(document.getElementById('calcVergiDeger').value); 
+        let rawVal = document.getElementById('calcVergiDeger').value;
+        let val = parsePrice(rawVal); 
         let rate = parseFloat(document.getElementById('calcVergiType').value); 
-        if(!val) return; 
-        document.getElementById('resVergi').innerHTML = `Vergi: <strong>${(val*rate).toLocaleString()} TL</strong>`; 
+        
+        if(!val || val <= 0) {
+            document.getElementById('resVergi').innerHTML = "<span style='color:red;'>Lütfen rayiç bedel giriniz.</span>";
+            document.getElementById('resVergi').style.display = 'block';
+            return; 
+        }
+
+        document.getElementById('resVergi').innerHTML = `Yıllık Vergi Tutarı: <strong style='color:#27ae60; font-size:1.2em;'>${(val*rate).toLocaleString('tr-TR')} TL</strong>`; 
         document.getElementById('resVergi').style.display = 'block'; 
     }
 
-    function parsePrice(p) { if (!p) return 0; return parseFloat(p.toString().replace(/\./g, '').replace(/,/g, '.')); }
+    // Güçlendirilmiş Parse Fonksiyonu
+    function parsePrice(p) { 
+        if (!p) return 0; 
+        // Boşlukları temizle, noktaları kaldır, virgülü noktaya çevir
+        let clean = p.toString().trim().replace(/\./g, '').replace(/,/g, '.');
+        let val = parseFloat(clean);
+        return isNaN(val) ? 0 : val;
+    }
     
     // YENİ: Anlık Komisyon Hesaplama Dahil
     function formatCurrency(input) { 
