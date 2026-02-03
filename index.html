@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KARACABAYRE.EST - v69 (TXT Fix & Floor Fix)</title>
+    <title>KARACABAYRE.EST - v70 (Final TXT)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -23,7 +23,7 @@
         }
         body { font-family: 'Segoe UI', sans-serif; background: #eef2f3; margin: 0; padding: 10px; color: #333; }
         
-        /* Ana Yapı - Şifresiz */
+        /* Ana Yapı - Direkt Görünür */
         #appContainer { display: block; }
         .container { max-width: 1800px; margin: 0 auto; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         
@@ -181,11 +181,11 @@
     <div class="container">
         <header>
             <div class="app-title-group">
-                <h1>🏢 KARACABAYRE.EST <span style="font-size:12px; color:#27ae60; border:1px solid #27ae60; padding:2px 8px; border-radius:10px; vertical-align:middle;">v69</span></h1>
+                <h1>🏢 KARACABAYRE.EST <span style="font-size:12px; color:#27ae60; border:1px solid #27ae60; padding:2px 8px; border-radius:10px; vertical-align:middle;">v70</span></h1>
                 <div class="app-subtitle">🏠 EMLAK ASİSTANI</div>
             </div>
             <div class="backup-controls">
-                <input type="file" id="fileUpload" style="display:none;" accept=".json, .txt, .text" onclick="this.value=null" onchange="uploadData(this)">
+                <input type="file" id="fileUpload" style="display:none;" onclick="this.value=null" onchange="uploadData(this)">
                 <button class="btn-backup" onclick="document.getElementById('fileUpload').click()"><i class="fa-solid fa-folder-open"></i> YÜKLE</button>
                 <button class="btn-backup" onclick="downloadData()"><i class="fa-solid fa-floppy-disk"></i> YEDEKLE</button>
             </div>
@@ -312,7 +312,7 @@
             </thead>
             <tbody id="tableBody"></tbody>
         </table>
-        <div class="legal-footer" style="margin-top:20px; font-size:12px; color:#aaa; text-align:center;">Veriler yerel tarayıcıda saklanır. (v69)</div>
+        <div class="legal-footer" style="margin-top:20px; font-size:12px; color:#aaa; text-align:center;">Veriler yerel tarayıcıda saklanır. (v70 TXT Mode)</div>
     </div>
 </div>
 
@@ -506,7 +506,7 @@
 </div>
 
 <script>
-    // VERİLER - DÜZELTME: floorList'i en başa alıp global yaptım
+    // --- ÖNEMLİ: KAT LİSTESİ GLOBALE ALINDI (v70) ---
     const floorList = [
         "Giriş Altı Kot 4", "Giriş Altı Kot 3", "Giriş Altı Kot 2", "Giriş Altı Kot 1",
         "Bodrum Kat", "Zemin Kat", 
@@ -542,7 +542,7 @@
         initImarLinks();
     };
 
-    // --- POPULATE SELECTS (KAT DÜZELTMESİ) ---
+    // --- POPULATE SELECTS (Kat Listesi Dolumu) ---
     function populateSelects() { 
         const iC = document.getElementById('inpCity'); 
         const fC = document.getElementById('filterCity');
@@ -561,9 +561,9 @@
         const tS=document.getElementById('inpType'), fT=document.getElementById('filterType'); 
         typeList.forEach(t=>{tS.innerHTML+=`<option>${t}</option>`;fT.innerHTML+=`<option>${t}</option>`;});
         
-        // DÜZELTME: Kat listesini doldurma kodu
+        // KAT LİSTESİ DOLDURMA
         const fL = document.getElementById('inpFloor');
-        fL.innerHTML = ''; // Temizle
+        fL.innerHTML = ''; 
         floorList.forEach(f => {
             const opt = document.createElement('option');
             opt.value = f;
@@ -572,7 +572,7 @@
         });
     }
 
-    // --- YENİDEN YAZILMIŞ AKILLI YÜKLEME MODÜLÜ (v69 TXT Fix) ---
+    // --- YENİLENMİŞ YEDEKLEME (.TXT VE GENİŞ UYUMLULUK) ---
     function saveToDisk() { 
         localStorage.setItem('KaracabayRE_EST_DB_v19', JSON.stringify(portfolio)); 
         localStorage.setItem('KaracabayRE_CRM_v19', JSON.stringify(crmData));
@@ -583,8 +583,10 @@
     function downloadData() { 
         const d = { portfolio: portfolio, crm: crmData, checklist: checklist, imarLinks: imarLinks }; 
         const a = document.createElement('a'); 
+        // .txt formatında indir, içeriği JSON string olsun
         a.href = "data:text/plain;charset=utf-8," + encodeURIComponent(JSON.stringify(d)); 
-        a.download = "Karacabay_Yedek_" + new Date().toISOString().split('T')[0] + ".json"; 
+        let dateStr = new Date().toISOString().split('T')[0];
+        a.download = "Karacabay_Yedek_" + dateStr + ".txt"; 
         document.body.appendChild(a); a.click(); a.remove(); 
     }
     
@@ -596,10 +598,9 @@
                 const raw = e.target.result;
                 const d = JSON.parse(raw);
                 
-                // --- FORMAT ALGILAMA ---
-                // Eski Format (Sadece Array) - TXT dosyanız muhtemelen bu formatta olabilir veya obje içinde array
+                // ESKİ SÜRÜM (Sadece Liste)
                 if (Array.isArray(d)) {
-                    if(confirm("Eski format (Liste) yedek dosyası algılandı. Yüklensin mi?")) {
+                    if(confirm("Eski format (v56) liste yedeği algılandı. Yüklensin mi?")) {
                         portfolio = d;
                         if(!crmData || !crmData.investors) crmData = { investors: [], network: [] };
                         if(!checklist) checklist = [];
@@ -608,9 +609,9 @@
                         window.location.reload();
                     }
                 } 
-                // Yeni Format (Obje içinde portfolio) - TXT dosyanız bu formatta da olabilir
+                // YENİ SÜRÜM (Obje)
                 else if (d.portfolio || d.crm) {
-                    if(confirm("Güncel format yedek dosyası algılandı. Yüklensin mi?")) {
+                    if(confirm("Güncel sistem yedeği algılandı. Yüklensin mi?")) {
                         if(d.portfolio && Array.isArray(d.portfolio)) portfolio = d.portfolio;
                         if(d.crm) crmData = d.crm;
                         if(d.checklist) checklist = d.checklist;
@@ -620,10 +621,10 @@
                     }
                 } 
                 else {
-                    alert("HATA: Dosya formatı tanınamadı.");
+                    alert("UYARI: Dosya içeriği tanınamadı.");
                 }
             } catch(err) { 
-                alert("Dosya okuma hatası! Lütfen geçerli bir yedek dosyası (.txt veya .json) seçtiğinizden emin olun.\nDetay: " + err); 
+                alert("Dosya okunamadı. Lütfen geçerli bir yedek dosyası seçin.\nHata: " + err); 
             }
             input.value = ''; 
         }; 
@@ -1040,6 +1041,22 @@
     function calcTapuKomisyon() { let p = parseFloat(document.getElementById('calcPriceComp').value); if(!p) return; let tapu = p * 0.04; let kom = p * 0.02 * 1.20; document.getElementById('resTapu').innerHTML = `<strong>Tapu (%4):</strong> ${(p*0.04).toLocaleString()} TL<br><strong>Komisyon (%2+KDV):</strong> ${kom.toLocaleString()} TL`; document.getElementById('resTapu').style.display = 'block'; }
     function calcEmsal() { let m2 = parseFloat(document.getElementById('calcArsaM2').value); let kaks = parseFloat(document.getElementById('calcKaks').value); if(!m2 || !kaks) return; document.getElementById('resEmsal').innerHTML = `İnşaat Alanı: <strong>${(m2*kaks).toLocaleString()} m²</strong>`; document.getElementById('resEmsal').style.display = 'block'; }
     function calcEmlakVergisi() { let val = parseFloat(document.getElementById('calcVergiDeger').value); let rate = parseFloat(document.getElementById('calcVergiType').value); if(!val) return; document.getElementById('resVergi').innerHTML = `Vergi: <strong>${(val*rate).toLocaleString()} TL</strong>`; document.getElementById('resVergi').style.display = 'block'; }
+
+    // Helpers
+    function parsePrice(p) { if (!p) return 0; return parseFloat(p.toString().replace(/\./g, '').replace(/,/g, '.')); }
+    function formatCurrency(input) { let v = input.value.replace(/\D/g, ''); if(v) input.value = parseFloat(v).toLocaleString('tr-TR'); else input.value = ''; }
+    function formatPhone(input) { let v = input.value.replace(/\D/g,''); if(v.length>1)v=v.substring(0,1)==='0'?v.substring(1):v; let f=v.match(/^(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})$/); if(f) input.value=!f[2]?f[1]:'0 ('+f[1]+') '+f[2]+(f[3]?' '+f[3]:'')+(f[4]?' '+f[4]:''); }
+    function autoResize(textarea) { textarea.style.height='auto'; textarea.style.height=textarea.scrollHeight+'px'; }
+    function openModal(id){ document.getElementById(id).style.display='block'; }
+    function closeModal(id){ document.getElementById(id).style.display='none'; }
+    function closeModalOutside(e, id){ if(e.target === document.getElementById(id)) closeModal(id); }
+
+    // Checklist
+    function renderChecklist(){ const c=document.getElementById('checklistContainer');c.innerHTML='';let u=0;checklist.forEach((item,i)=>{if(!item.checked)u++; const d=document.createElement('div');d.className='checklist-item '+(item.checked?'checked':'');d.innerHTML=`<span onclick="toggleCheck(${i})">${item.text}</span><button class="btn-delete-rec" style="display:block;height:20px;padding:0 5px;" onclick="deleteCheckItem(${i})">Sil</button>`;c.appendChild(d);});document.getElementById('chkBadge').innerText=u;document.getElementById('chkBadge').style.display=u>0?'block':'none';}
+    function addCheckItem(){ const t=document.getElementById('newCheckItem').value;if(!t)return;checklist.push({text:t,checked:false});localStorage.setItem('KaracabayRE_CHK_v1',JSON.stringify(checklist));document.getElementById('newCheckItem').value='';renderChecklist();}
+    function toggleCheck(i){ checklist[i].checked=!checklist[i].checked;localStorage.setItem('KaracabayRE_CHK_v1',JSON.stringify(checklist));renderChecklist();}
+    function deleteCheckItem(i){ checklist.splice(i,1);localStorage.setItem('KaracabayRE_CHK_v1',JSON.stringify(checklist));renderChecklist();}
+    function deleteFromForm() { if(confirm("Kayıt silinsin mi?")) { portfolio = portfolio.filter(p => p.id !== editingId); saveToDisk(); renderTable(); resetForm(); } }
 </script>
 </body>
 </html>
