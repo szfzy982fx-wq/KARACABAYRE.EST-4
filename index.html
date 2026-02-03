@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KARACABAYRE.EST - v64 (CRM Fix + Layout)</title>
+    <title>KARACABAYRE.EST - v65 (Final Print & CRM Fix)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -58,9 +58,9 @@
         .currency-group select { width: 70px; flex-shrink: 0; background: #eee; font-weight: bold; }
         .auth-box { grid-column: span 2; display: flex; gap: 10px; background: #eafaf1; padding: 10px; border: 1px dashed var(--accent); border-radius: 6px; }
         
-        /* YENİ ALT SATIR DÜZENİ (Link - Açıklama - Kaydet) */
+        /* YENİ ALT SATIR DÜZENİ (v64'ten devam) */
         .form-bottom-row {
-            grid-column: 1 / -1; /* Tüm genişliği kapla */
+            grid-column: 1 / -1; 
             display: flex;
             gap: 15px;
             align-items: flex-end;
@@ -68,14 +68,8 @@
             padding-top: 10px;
             border-top: 1px dashed #eee;
         }
-        .form-bottom-item {
-            flex: 1; /* Link ve Açıklama eşit genişlik */
-        }
-        .form-bottom-action {
-            flex: 0 0 auto; /* Buton içeriği kadar yer kaplasın */
-            display: flex;
-            gap: 5px;
-        }
+        .form-bottom-item { flex: 1; }
+        .form-bottom-action { flex: 0 0 auto; display: flex; gap: 5px; }
 
         .btn-save { background: var(--accent); color: white; border: none; padding: 0 30px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 14px; height: 42px; display: flex; align-items: center; justify-content: center; white-space: nowrap; }
         .btn-delete-rec { background: var(--danger); color: white; border: none; padding: 0 15px; border-radius: 4px; cursor: pointer; font-weight: bold; display: none; height: 42px; }
@@ -114,9 +108,17 @@
         .badge-crm-danger { background: #c0392b; color:white; font-size:13px; font-weight:900; padding:6px 10px; border-radius:4px; display:inline-block; min-width:80px; text-align:center; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        /* Modals */
+        /* Modals (Genel) */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; overflow-y: hidden; }
         .modal-content { background: white; margin: 2% auto; padding: 20px; width: 95%; border-radius: 8px; position: relative; max-height: 90vh; display: flex; flex-direction: column; overflow-y: auto; }
+        
+        /* CRM Modal Özel Yapı (Başlık Sabit Kalsın Diye Flex Column) */
+        .crm-modal-content {
+            background: white; margin: 2% auto; padding: 20px; width: 95%; border-radius: 8px; position: relative; 
+            height: 90vh; /* Yüksekliği sabitle */
+            display: flex; flex-direction: column; overflow: hidden; /* İçerik taşmasını engelle */
+        }
+
         .tool-modal-content { width: 400px; max-width: 90%; margin: 10% auto; }
         .checklist-item { display: flex; align-items: center; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; }
         .checklist-item.checked span { text-decoration: line-through; color: #aaa; }
@@ -136,16 +138,18 @@
         .tab-btn.active { border-bottom-color: var(--secondary); color: var(--secondary); font-weight: bold; }
         .tab-content { display: none; } .tab-content.active { display: block; }
         
-        /* CRM Style (v56 + Fixes) */
-        .crm-header { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; overflow-x: auto; }
+        /* CRM Style (DÜZELTİLDİ: Başlık Sabit) */
+        .crm-header { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; flex-shrink: 0; /* Başlık küçülmesin */ }
         .crm-tab { padding: 10px 20px; cursor: pointer; font-weight: bold; border-radius: 6px; border: 1px solid #eee; background: #f9f9f9; white-space: nowrap; }
         .crm-tab.active { background: var(--accent); color: white; border-color: var(--accent); }
+        
+        /* CRM İçerik Alanı (Kaydırılabilir) */
+        .crm-content-scrollable { flex-grow: 1; overflow-y: auto; padding-right: 5px; }
+        
         .crm-input-panel { background: #f1f2f6; padding: 15px; border-radius: 6px; margin-bottom: 15px; border-left: 5px solid var(--accent); }
-        /* CRM Input Grid genişletildi */
         .crm-input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
         .crm-buttons { display: flex; gap: 10px; margin-top: 15px; }
-        /* CRM Tablo Taşıyıcı Yüksekliği Sabitlendi ve Scroll Eklendi */
-        .crm-table-container { max-height: 400px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px; }
+        .crm-table-container { overflow-x: auto; } /* Tablo yatayda taşarsa */
         
         .print-only { display: none; }
 
@@ -156,12 +160,23 @@
             .select-col-header, .select-col-cell { width: 20px !important; }
         }
 
+        /* YAZDIRMA AYARLARI (v56 STİLİ + SAHİPLİK GİZLEME) */
         @media print { 
             body, .container, #appContainer { background-color: white !important; margin: 0; padding: 0; }
             .input-panel, .filter-bar, .backup-controls, .tools-bar, #loginOverlay, .no-print { display: none !important; } 
+            
+            /* Sahiplik Etiketlerini Gizle (İSTEK 2) */
+            .badge-own, .badge-shared { display: none !important; }
+            
             .print-only { display: table-cell !important; } 
             #appContainer { display: block !important; } 
-            table, th, td, tr { display: table-row-group !important; border: 1px solid #ddd; padding: 2px !important; font-size: 8px; }
+            
+            /* v56 Tablo Stili (Kenarlıklar ve Sıkıştırma) */
+            table { width: 100%; border-collapse: collapse; font-size: 10px; border: 1px solid #ccc; }
+            th { background-color: #f1f1f1 !important; color: black !important; border: 1px solid #ccc; padding: 5px; text-transform: uppercase; font-weight: 800; }
+            td { border: 1px solid #ccc; padding: 5px; vertical-align: top; }
+            tr { page-break-inside: avoid; }
+            
             thead { display: table-header-group !important; }
             tr { display: table-row !important; }
         }
@@ -172,7 +187,7 @@
 <div id="loginOverlay">
     <div class="login-box">
         <h2>🔒 GÜVENLİ GİRİŞ</h2>
-        <p>KaracabayRE.EST v64</p>
+        <p>KaracabayRE.EST v65</p>
         <input type="password" id="loginPin" placeholder="Şifre (1923)" inputmode="numeric">
         <button onclick="checkLogin()">GİRİŞ YAP</button>
     </div>
@@ -182,7 +197,7 @@
     <div class="container">
         <header>
             <div class="app-title-group">
-                <h1>🏢 KARACABAYRE.EST <span style="font-size:12px; color:#27ae60; border:1px solid #27ae60; padding:2px 8px; border-radius:10px; vertical-align:middle;">v64</span></h1>
+                <h1>🏢 KARACABAYRE.EST <span style="font-size:12px; color:#27ae60; border:1px solid #27ae60; padding:2px 8px; border-radius:10px; vertical-align:middle;">v65</span></h1>
                 <div class="app-subtitle">🏠 EMLAK ASİSTANI</div>
             </div>
             <div class="backup-controls">
@@ -312,7 +327,7 @@
             </thead>
             <tbody id="tableBody"></tbody>
         </table>
-        <div class="legal-footer" style="margin-top:20px; font-size:12px; color:#aaa; text-align:center;">Veriler yerel tarayıcıda saklanır. (v64)</div>
+        <div class="legal-footer" style="margin-top:20px; font-size:12px; color:#aaa; text-align:center;">Veriler yerel tarayıcıda saklanır. (v65)</div>
     </div>
 </div>
 
@@ -344,8 +359,8 @@
 <div id="checklistModal" class="modal" onclick="closeModalOutside(event, 'checklistModal')"><div class="modal-content tool-modal-content"><div style="display:flex;justify-content:space-between; margin-bottom:15px; border-bottom:2px solid #c0392b; padding-bottom:10px;"><h3 style="color:#c0392b; margin:0;"><i class="fa-solid fa-bell"></i> UNUTMA!</h3><span onclick="closeModal('checklistModal')" style="cursor:pointer;font-size:24px;">&times;</span></div><div style="display:flex; gap:10px; margin-bottom:15px;"><input type="text" id="newCheckItem" placeholder="Hatırlatma ekle..." onkeypress="if(event.key==='Enter') addCheckItem()"><button class="btn-save" style="flex:0; width:60px; background:#c0392b;" onclick="addCheckItem()">EKLE</button></div><div id="checklistContainer" style="max-height:400px; overflow-y:auto; border:1px solid #eee; border-radius:4px;"></div></div></div>
 
 <div id="crmModal" class="modal" onclick="closeModalOutside(event, 'crmModal')">
-    <div class="modal-content">
-        <div style="display:flex;justify-content:space-between; margin-bottom:10px;">
+    <div class="crm-modal-content">
+        <div style="display:flex;justify-content:space-between; margin-bottom:10px; flex-shrink:0;">
             <h3>👥 Müşteri İlişkileri (CRM)</h3>
             <span onclick="closeModal('crmModal')" style="cursor:pointer;font-size:24px;">&times;</span>
         </div>
@@ -353,52 +368,56 @@
             <div id="tab1" class="crm-tab active" onclick="switchCRMTab('investors')">💰 Talep Havuzu</div>
             <div id="tab2" class="crm-tab" onclick="switchCRMTab('network')">📢 Etki Çevresi</div>
         </div>
-        <div id="crmInvestors" class="crm-section" style="display:block;">
-            <div class="crm-input-panel">
-                <div class="crm-input-grid" style="grid-template-columns: repeat(4, 1fr);">
-                    <div class="form-group"><label>Ad Soyad</label><input type="text" id="invName"></div>
-                    <div class="form-group"><label>Telefon</label><input type="text" id="invPhone" placeholder="05XX..." oninput="formatPhone(this)"></div>
-                    <div class="form-group"><label>Talep Tipi</label><select id="invType"><option>Daire</option><option>Villa</option><option>Arsa</option><option>İşyeri</option><option>Yatırımlık</option></select></div>
-                    <div class="form-group"><label>Bölge Tercihi</label><input type="text" id="invRegion" placeholder="Lara, Konyaaltı..."></div>
-                    <div class="form-group"><label>Bütçe (Max)</label><input type="text" id="invBudget" oninput="formatCurrency(this)"></div>
-                    <div class="form-group"><label>Durum</label><select id="invStatus"><option value="Sıcak">🔥 Sıcak (Acil)</option><option value="Ilık">⚖️ Ilık (Normal)</option><option value="Soğuk">🧊 Soğuk (Beklemede)</option></select></div>
-                    <div class="form-group" style="grid-column: span 2;"><label>Notlar</label><textarea id="invNote" rows="1" class="auto-expand"></textarea></div>
+        
+        <div class="crm-content-scrollable">
+            <div id="crmInvestors" class="crm-section" style="display:block;">
+                <div class="crm-input-panel">
+                    <div class="crm-input-grid" style="grid-template-columns: repeat(4, 1fr);">
+                        <div class="form-group"><label>Ad Soyad</label><input type="text" id="invName"></div>
+                        <div class="form-group"><label>Telefon</label><input type="text" id="invPhone" placeholder="05XX..." oninput="formatPhone(this)"></div>
+                        <div class="form-group"><label>Talep Tipi</label><select id="invType"><option>Daire</option><option>Villa</option><option>Arsa</option><option>İşyeri</option><option>Yatırımlık</option></select></div>
+                        <div class="form-group"><label>Bölge Tercihi</label><input type="text" id="invRegion" placeholder="Lara, Konyaaltı..."></div>
+                        <div class="form-group"><label>Bütçe (Max)</label><input type="text" id="invBudget" oninput="formatCurrency(this)"></div>
+                        <div class="form-group"><label>Durum</label><select id="invStatus"><option value="Sıcak">🔥 Sıcak (Acil)</option><option value="Ilık">⚖️ Ilık (Normal)</option><option value="Soğuk">🧊 Soğuk (Beklemede)</option></select></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Notlar</label><textarea id="invNote" rows="1" class="auto-expand"></textarea></div>
+                    </div>
+                    <div class="crm-buttons">
+                        <button class="btn-save" onclick="saveCRMInvestor()" id="btnInvSave">KAYDET</button>
+                        <button id="btnInvDelete" class="btn-delete-rec" onclick="deleteCRMInvestor()">SİL</button>
+                        <button id="btnInvCancel" class="btn-cancel" onclick="resetCRMForm('investors')">İPTAL</button>
+                    </div>
                 </div>
-                <div class="crm-buttons">
-                    <button class="btn-save" onclick="saveCRMInvestor()" id="btnInvSave">KAYDET</button>
-                    <button id="btnInvDelete" class="btn-delete-rec" onclick="deleteCRMInvestor()">SİL</button>
-                    <button id="btnInvCancel" class="btn-cancel" onclick="resetCRMForm('investors')">İPTAL</button>
-                </div>
-            </div>
-            <div class="crm-table-container">
-                <table class="crm-table">
-                    <thead><tr><th width="15%">Ad Soyad</th><th width="12%">Telefon</th><th width="20%">Talep / Bölge</th><th width="13%">Bütçe</th><th width="10%">Durum</th><th width="20%">Notlar</th><th width="10%">İşlem</th></tr></thead>
-                    <tbody id="investorTableBody"></tbody>
-                </table>
-            </div>
-        </div>
-        <div id="crmNetwork" class="crm-section" style="display:none;">
-            <div class="crm-input-panel">
-                <div class="crm-input-grid" style="grid-template-columns: repeat(3, 1fr);">
-                    <div class="form-group"><label>Ad Soyad</label><input type="text" id="netName"></div>
-                    <div class="form-group"><label>Telefon</label><input type="text" id="netPhone" oninput="formatPhone(this)"></div>
-                    <div class="form-group"><label>Meslek / Unvan</label><input type="text" id="netJob"></div>
-                    <div class="form-group"><label>Şehir</label><input type="text" id="netCity" value="Antalya"></div>
-                    <div class="form-group"><label>Yakınlık / Ref.</label><input type="text" id="netRelation" placeholder="Arkadaş, Eski Müşteri..."></div>
-                    <div class="form-group"><label>Son Arama</label><input type="date" id="netLastCall"></div>
-                    <div class="form-group" style="grid-column: span 3;"><label>Açıklama / Potansiyel</label><textarea id="netNote" rows="1" class="auto-expand"></textarea></div>
-                </div>
-                <div class="crm-buttons">
-                    <button class="btn-save" onclick="saveCRMNetwork()" id="btnNetSave">KAYDET</button>
-                    <button id="btnNetDelete" class="btn-delete-rec" onclick="deleteCRMNetwork()">SİL</button>
-                    <button id="btnNetCancel" class="btn-cancel" onclick="resetCRMForm('network')">İPTAL</button>
+                <div class="crm-table-container">
+                    <table class="crm-table">
+                        <thead><tr><th width="15%">Ad Soyad</th><th width="12%">Telefon</th><th width="20%">Talep / Bölge</th><th width="13%">Bütçe</th><th width="10%">Durum</th><th width="20%">Notlar</th><th width="10%">İşlem</th></tr></thead>
+                        <tbody id="investorTableBody"></tbody>
+                    </table>
                 </div>
             </div>
-            <div class="crm-table-container">
-                <table class="crm-table">
-                    <thead><tr><th width="16%">Ad Soyad</th><th width="12%">Meslek/Şehir</th><th width="12%">Telefon</th><th width="10%">Yakınlık</th><th width="10%">Son Arama</th><th width="8%">Durum</th><th width="14%">Notlar</th><th width="18%">İşlem</th></tr></thead>
-                    <tbody id="networkTableBody"></tbody>
-                </table>
+            
+            <div id="crmNetwork" class="crm-section" style="display:none;">
+                <div class="crm-input-panel">
+                    <div class="crm-input-grid" style="grid-template-columns: repeat(3, 1fr);">
+                        <div class="form-group"><label>Ad Soyad</label><input type="text" id="netName"></div>
+                        <div class="form-group"><label>Telefon</label><input type="text" id="netPhone" oninput="formatPhone(this)"></div>
+                        <div class="form-group"><label>Meslek / Unvan</label><input type="text" id="netJob"></div>
+                        <div class="form-group"><label>Şehir</label><input type="text" id="netCity" value="Antalya"></div>
+                        <div class="form-group"><label>Yakınlık / Ref.</label><input type="text" id="netRelation" placeholder="Arkadaş, Eski Müşteri..."></div>
+                        <div class="form-group"><label>Son Arama</label><input type="date" id="netLastCall"></div>
+                        <div class="form-group" style="grid-column: span 3;"><label>Açıklama / Potansiyel</label><textarea id="netNote" rows="1" class="auto-expand"></textarea></div>
+                    </div>
+                    <div class="crm-buttons">
+                        <button class="btn-save" onclick="saveCRMNetwork()" id="btnNetSave">KAYDET</button>
+                        <button id="btnNetDelete" class="btn-delete-rec" onclick="deleteCRMNetwork()">SİL</button>
+                        <button id="btnNetCancel" class="btn-cancel" onclick="resetCRMForm('network')">İPTAL</button>
+                    </div>
+                </div>
+                <div class="crm-table-container">
+                    <table class="crm-table">
+                        <thead><tr><th width="16%">Ad Soyad</th><th width="12%">Meslek/Şehir</th><th width="12%">Telefon</th><th width="10%">Yakınlık</th><th width="10%">Son Arama</th><th width="8%">Durum</th><th width="14%">Notlar</th><th width="18%">İşlem</th></tr></thead>
+                        <tbody id="networkTableBody"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -709,7 +728,7 @@
         setTimeout(function() { window.print(); setTimeout(function() { document.body.classList.remove('print-selected-mode'); }, 2000); }, 100);
     }
     
-    // WHATSAPP GÜNCELLEMESİ (SADECE NET M2)
+    // WHATSAPP
     function sendSelectedToWhatsapp() {
         const selectedCheckboxes = document.querySelectorAll('.row-selected input[type="checkbox"]');
         if(selectedCheckboxes.length === 0) { alert("Lütfen portföy seçin."); return; }
@@ -727,7 +746,6 @@
                     const item = portfolio.find(p => p.id === id);
                     if(item) {
                         const cityToUse = (filterCityVal !== 'all') ? filterCityVal : (item.city || 'Antalya');
-                        // NET M2 BİLGİSİ DÜZELTİLDİ: Sadece 'NET X m2' şeklinde
                         const netInfo = item.net ? ` | 📏 NET ${item.net} m²` : '';
                         
                         msg += `🏠 *${item.status} ${item.type}*\n📍 ${cityToUse} / ${item.district} / ${item.neighborhood}\n🔢 ${item.rooms}${netInfo} | 💰 ${item.price} ${item.currency||'₺'}\n-------------------\n`;
@@ -740,45 +758,28 @@
     
     // EXCEL EXPORT (SADECE SEÇİLENLER)
     function exportSelectedToExcel() {
-        // Kontrol: Hiç seçim yapılmış mı?
         const selectedRows = document.querySelectorAll('#tableBody tr.row-selected');
         if(selectedRows.length === 0) {
             alert("⚠️ Lütfen Excel'e aktarmak istediğiniz kayıtları soldaki kutucuktan seçin.");
             return;
         }
 
-        // Tabloyu klonla
         let originalTable = document.getElementById("portfolioTable");
         let tableClone = originalTable.cloneNode(true);
         
-        // Temizlik döngüsü
-        // Tersten giderek silme işlemi yapalım
         for (let i = tableClone.rows.length - 1; i >= 0; i--) {
             let row = tableClone.rows[i];
-            
-            // Header (i=0) kalsın. 
             if(i > 0) {
-                // Eğer orijinal satırda 'row-selected' sınıfı YOKSA, klondan sil
-                // Orijinal satırı bulmak için tbody içindeki indexi kullanıyoruz
-                // tableClone.rows header dahil tüm satırları içerir.
-                // Orijinal tablo ile index eşleşmesi için tbody'ye bakmak daha güvenli ama
-                // burada basitçe klon üzerinde class kontrolü yapamayız çünkü klon DOM'da değil ve dinamik değil.
-                // Klonlama anında classlar gelir.
-                
                 if(!row.classList.contains('row-selected')) {
                     tableClone.deleteRow(i);
                     continue;
                 }
             }
-            
-            // Hücre temizliği (Butonları sil)
             if(row.cells.length > 0) {
-               row.deleteCell(10); // İşlem
-               row.deleteCell(9);  // Not
-               row.deleteCell(8);  // Link
-               row.deleteCell(0);  // Checkbox
-               
-               // İçerik temizliği (Satır sonlarını boşluk yap)
+               row.deleteCell(10); 
+               row.deleteCell(9);  
+               row.deleteCell(8);  
+               row.deleteCell(0);  
                for(let cell of row.cells) {
                    cell.innerText = cell.innerText.replace(/\n/g, ' ').trim();
                }
