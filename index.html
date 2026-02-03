@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>EMLAK PORTFÖY ASİSTANI - v71</title>
+    <title>EMLAK PORTFÖY ASİSTANI - v72</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -31,11 +31,37 @@
         .app-title-group h1 { margin: 0; line-height: 1; font-size: 24px; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; }
         .app-subtitle { font-size: 12px; font-weight: 600; color: #7f8c8d; letter-spacing: 2px; margin-top: 5px; }
 
-        .clock-container { display: flex; align-items: center; gap: 10px; background: #333; color: #0f0; padding: 5px 15px; border-radius: 6px; font-family: 'Courier New', monospace; font-weight: bold; font-size: 18px; border: 2px solid #555; box-shadow: inset 0 0 5px rgba(0,0,0,0.5); }
-        .clock-input { background: #eee; border: none; padding: 2px; border-radius: 3px; font-size: 12px; width: 80px; display:none; }
-        .alarm-btn { background: none; border: none; color: white; cursor: pointer; font-size: 14px; }
-        .alarm-active { animation: blink-red 1s infinite; background: #c0392b !important; color: white !important; }
-        @keyframes blink-red { 50% { opacity: 0.5; } }
+        /* MODERN SAAT TASARIMI */
+        .clock-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 50px; /* Kapsül görünümü */
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 600;
+            font-size: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+        .clock-container:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.25); }
+        .clock-input { background: rgba(255,255,255,0.9); border: none; padding: 4px; border-radius: 4px; font-size: 14px; width: 90px; color:#333; display:none; outline:none; }
+        .alarm-btn { background: rgba(255,255,255,0.1); border: none; color: white; cursor: pointer; font-size: 16px; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+        .alarm-btn:hover { background: rgba(255,255,255,0.3); }
+        
+        /* Modern Alarm Animasyonu */
+        .alarm-active { 
+            background: linear-gradient(135deg, #c0392b, #e74c3c) !important;
+            animation: pulse-red 1s infinite;
+        }
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(192, 57, 43, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(192, 57, 43, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(192, 57, 43, 0); }
+        }
 
         /* ÖZET PANELİ (DASHBOARD) */
         .dashboard-stats { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
@@ -185,12 +211,13 @@
     <div class="container">
         <header>
             <div class="app-title-group">
-                <h1>🏢 EMLAK PORTFÖY ASİSTANI <span style="font-size:12px; color:#27ae60; border:1px solid #27ae60; padding:2px 8px; border-radius:10px; vertical-align:middle;">v71</span></h1>
+                <h1>🏢 EMLAK PORTFÖY ASİSTANI <span style="font-size:12px; color:#27ae60; border:1px solid #27ae60; padding:2px 8px; border-radius:10px; vertical-align:middle;">v72</span></h1>
                 <div class="app-subtitle">Profesyonel Emlak Yönetim Sistemi</div>
             </div>
             
             <div class="clock-container" id="digitalClockBox">
-                <span id="digitalClockDisplay">00:00:00</span>
+                <i class="fa-regular fa-clock"></i>
+                <span id="digitalClockDisplay" style="letter-spacing:1px;">00:00:00</span>
                 <button class="alarm-btn" onclick="toggleAlarmInput()" title="Alarm Kur"><i class="fa-solid fa-bell"></i></button>
                 <input type="time" id="alarmTimeInput" class="clock-input" onchange="setAlarm(this.value)">
             </div>
@@ -331,7 +358,7 @@
             </thead>
             <tbody id="tableBody"></tbody>
         </table>
-        <div class="legal-footer" style="margin-top:20px; font-size:12px; color:#aaa; text-align:center;">Veriler yerel tarayıcıda saklanır. (v71)</div>
+        <div class="legal-footer" style="margin-top:20px; font-size:12px; color:#aaa; text-align:center;">Veriler yerel tarayıcıda saklanır. (v72)</div>
     </div>
 </div>
 
@@ -505,19 +532,19 @@
             <button class="tab-btn" onclick="switchTab('tabVergi')">Vergi</button>
         </div>
         <div id="tabTapu" class="tab-content active">
-            <div class="form-group"><label>Satış Bedeli (TL)</label><input type="number" id="calcPriceComp" placeholder="5000000"></div>
+            <div class="form-group"><label>Satış Bedeli (TL)</label><input type="text" id="calcPriceComp" placeholder="5.000.000" oninput="formatCurrency(this)"></div>
             <button class="btn-save" style="width:100%; margin-top:10px;" onclick="calcTapuKomisyon()">HESAPLA</button>
             <div id="resTapu" style="margin-top:10px; font-size:13px; font-weight:bold; display:none;"></div>
         </div>
         <div id="tabEmsal" class="tab-content">
-            <div class="form-group"><label>Arsa (m²)</label><input type="number" id="calcArsaM2"></div>
-            <div class="form-group"><label>KAKS / Emsal</label><input type="number" id="calcKaks" placeholder="1.5"></div>
+            <div class="form-group"><label>Arsa (m²)</label><input type="text" id="calcArsaM2" oninput="formatCurrency(this)"></div>
+            <div class="form-group"><label>KAKS / Emsal</label><input type="text" id="calcKaks" placeholder="1.5"></div>
             <button class="btn-save" style="width:100%; margin-top:10px;" onclick="calcEmsal()">HESAPLA</button>
             <div id="resEmsal" style="margin-top:10px; font-weight:bold; display:none;"></div>
         </div>
         <div id="tabVergi" class="tab-content">
             <div class="form-group"><label>Tür</label><select id="calcVergiType"><option value="0.002">Konut (B.Şehir)</option><option value="0.004">İşyeri (B.Şehir)</option><option value="0.006">Arsa (B.Şehir)</option></select></div>
-            <div class="form-group"><label>Rayiç Bedel</label><input type="number" id="calcVergiDeger"></div>
+            <div class="form-group"><label>Rayiç Bedel</label><input type="text" id="calcVergiDeger" oninput="formatCurrency(this)"></div>
             <button class="btn-save" style="width:100%; margin-top:5px;" onclick="calcEmlakVergisi()">HESAPLA</button>
             <div id="resVergi" style="margin-top:10px; font-weight:bold; display:none;"></div>
         </div>
@@ -687,9 +714,33 @@
     async function fetchCurrency() { try { const res = await fetch('https://api.exchangerate-api.com/v4/latest/TRY'); const data = await res.json(); if(document.getElementById('usdRate').value === "") document.getElementById('usdRate').value = (1 / data.rates.USD).toFixed(4); if(document.getElementById('eurRate').value === "") document.getElementById('eurRate').value = (1 / data.rates.EUR).toFixed(4); } catch(e) {} }
     function calculateCurrencyTotal() { let amount = parseFloat(document.getElementById('calcCurrAmount').value); let type = document.getElementById('calcCurrType').value; let rate = type === 'USD' ? parseFloat(document.getElementById('usdRate').value) : parseFloat(document.getElementById('eurRate').value); if(!amount || !rate) return; document.getElementById('currResText').innerText = (amount * rate).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " TL"; document.getElementById('currencyTotalRes').style.display = 'block'; }
     function switchTab(id) { document.querySelectorAll('.tab-content').forEach(d => d.style.display='none'); document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); document.getElementById(id).style.display = 'block'; event.currentTarget.classList.add('active'); }
-    function calcTapuKomisyon() { let p = parseFloat(document.getElementById('calcPriceComp').value); if(!p) return; let tapu = p * 0.04; let kom = p * 0.02 * 1.20; document.getElementById('resTapu').innerHTML = `<strong>Tapu (%4):</strong> ${(p*0.04).toLocaleString()} TL<br><strong>Komisyon (%2+KDV):</strong> ${kom.toLocaleString()} TL`; document.getElementById('resTapu').style.display = 'block'; }
-    function calcEmsal() { let m2 = parseFloat(document.getElementById('calcArsaM2').value); let kaks = parseFloat(document.getElementById('calcKaks').value); if(!m2 || !kaks) return; document.getElementById('resEmsal').innerHTML = `İnşaat Alanı: <strong>${(m2*kaks).toLocaleString()} m²</strong>`; document.getElementById('resEmsal').style.display = 'block'; }
-    function calcEmlakVergisi() { let val = parseFloat(document.getElementById('calcVergiDeger').value); let rate = parseFloat(document.getElementById('calcVergiType').value); if(!val) return; document.getElementById('resVergi').innerHTML = `Vergi: <strong>${(val*rate).toLocaleString()} TL</strong>`; document.getElementById('resVergi').style.display = 'block'; }
+    
+    // --- DÜZELTİLEN EMLAK HESAPLAMA FONKSİYONLARI ---
+    // Artık parsePrice ile metni sayıya çeviriyoruz, böylece "5.000.000" gibi değerler bozulmuyor.
+    function calcTapuKomisyon() { 
+        let p = parsePrice(document.getElementById('calcPriceComp').value); 
+        if(!p) return; 
+        let tapu = p * 0.04; 
+        let kom = p * 0.02 * 1.20; 
+        document.getElementById('resTapu').innerHTML = `<strong>Tapu (%4):</strong> ${(p*0.04).toLocaleString()} TL<br><strong>Komisyon (%2+KDV):</strong> ${kom.toLocaleString()} TL`; 
+        document.getElementById('resTapu').style.display = 'block'; 
+    }
+    
+    function calcEmsal() { 
+        let m2 = parsePrice(document.getElementById('calcArsaM2').value); 
+        let kaks = parseFloat(document.getElementById('calcKaks').value); 
+        if(!m2 || !kaks) return; 
+        document.getElementById('resEmsal').innerHTML = `İnşaat Alanı: <strong>${(m2*kaks).toLocaleString()} m²</strong>`; 
+        document.getElementById('resEmsal').style.display = 'block'; 
+    }
+    
+    function calcEmlakVergisi() { 
+        let val = parsePrice(document.getElementById('calcVergiDeger').value); 
+        let rate = parseFloat(document.getElementById('calcVergiType').value); 
+        if(!val) return; 
+        document.getElementById('resVergi').innerHTML = `Vergi: <strong>${(val*rate).toLocaleString()} TL</strong>`; 
+        document.getElementById('resVergi').style.display = 'block'; 
+    }
 
     function parsePrice(p) { if (!p) return 0; return parseFloat(p.toString().replace(/\./g, '').replace(/,/g, '.')); }
     
@@ -700,15 +751,17 @@
             let val = parseFloat(v);
             input.value = val.toLocaleString('tr-TR'); 
             
-            // Komisyon Hesapla (%2)
-            let comm = val * 0.02;
-            let commKdv = comm * 1.20;
-            let commBox = document.getElementById('instantComm');
-            commBox.style.display = 'block';
-            commBox.innerHTML = `Hizmet Bedeli (%2): ${comm.toLocaleString('tr-TR')} TL <span style="color:#7f8c8d; font-weight:normal;">(+KDV: ${commKdv.toLocaleString('tr-TR')} TL)</span>`;
+            // Eğer ana formdaki fiyat kutusu ise anlık komisyonu göster
+            if(input.id === 'inpPrice') {
+                let comm = val * 0.02;
+                let commKdv = comm * 1.20;
+                let commBox = document.getElementById('instantComm');
+                commBox.style.display = 'block';
+                commBox.innerHTML = `Hizmet Bedeli (%2): ${comm.toLocaleString('tr-TR')} TL <span style="color:#7f8c8d; font-weight:normal;">(+KDV: ${commKdv.toLocaleString('tr-TR')} TL)</span>`;
+            }
         } else { 
             input.value = ''; 
-            document.getElementById('instantComm').style.display='none';
+            if(input.id === 'inpPrice') document.getElementById('instantComm').style.display='none';
         } 
     }
     
