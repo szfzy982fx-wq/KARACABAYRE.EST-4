@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KARACABAYRE.EST - v65 (Final Print & CRM Fix)</title>
+    <title>KARACABAYRE.EST - v66 (Print Selection Fix)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -58,7 +58,7 @@
         .currency-group select { width: 70px; flex-shrink: 0; background: #eee; font-weight: bold; }
         .auth-box { grid-column: span 2; display: flex; gap: 10px; background: #eafaf1; padding: 10px; border: 1px dashed var(--accent); border-radius: 6px; }
         
-        /* YENİ ALT SATIR DÜZENİ (v64'ten devam) */
+        /* ALT SATIR DÜZENİ (v64/65 Sabit) */
         .form-bottom-row {
             grid-column: 1 / -1; 
             display: flex;
@@ -108,15 +108,15 @@
         .badge-crm-danger { background: #c0392b; color:white; font-size:13px; font-weight:900; padding:6px 10px; border-radius:4px; display:inline-block; min-width:80px; text-align:center; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        /* Modals (Genel) */
+        /* Modals */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; overflow-y: hidden; }
         .modal-content { background: white; margin: 2% auto; padding: 20px; width: 95%; border-radius: 8px; position: relative; max-height: 90vh; display: flex; flex-direction: column; overflow-y: auto; }
         
-        /* CRM Modal Özel Yapı (Başlık Sabit Kalsın Diye Flex Column) */
+        /* CRM Modal (Sabit Başlık Yapısı) */
         .crm-modal-content {
             background: white; margin: 2% auto; padding: 20px; width: 95%; border-radius: 8px; position: relative; 
-            height: 90vh; /* Yüksekliği sabitle */
-            display: flex; flex-direction: column; overflow: hidden; /* İçerik taşmasını engelle */
+            height: 90vh; 
+            display: flex; flex-direction: column; overflow: hidden; 
         }
 
         .tool-modal-content { width: 400px; max-width: 90%; margin: 10% auto; }
@@ -138,18 +138,17 @@
         .tab-btn.active { border-bottom-color: var(--secondary); color: var(--secondary); font-weight: bold; }
         .tab-content { display: none; } .tab-content.active { display: block; }
         
-        /* CRM Style (DÜZELTİLDİ: Başlık Sabit) */
-        .crm-header { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; flex-shrink: 0; /* Başlık küçülmesin */ }
+        /* CRM Style (Sabit Başlık) */
+        .crm-header { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; flex-shrink: 0; }
         .crm-tab { padding: 10px 20px; cursor: pointer; font-weight: bold; border-radius: 6px; border: 1px solid #eee; background: #f9f9f9; white-space: nowrap; }
         .crm-tab.active { background: var(--accent); color: white; border-color: var(--accent); }
         
-        /* CRM İçerik Alanı (Kaydırılabilir) */
         .crm-content-scrollable { flex-grow: 1; overflow-y: auto; padding-right: 5px; }
         
         .crm-input-panel { background: #f1f2f6; padding: 15px; border-radius: 6px; margin-bottom: 15px; border-left: 5px solid var(--accent); }
         .crm-input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
         .crm-buttons { display: flex; gap: 10px; margin-top: 15px; }
-        .crm-table-container { overflow-x: auto; } /* Tablo yatayda taşarsa */
+        .crm-table-container { overflow-x: auto; }
         
         .print-only { display: none; }
 
@@ -160,18 +159,17 @@
             .select-col-header, .select-col-cell { width: 20px !important; }
         }
 
-        /* YAZDIRMA AYARLARI (v56 STİLİ + SAHİPLİK GİZLEME) */
+        /* YAZDIRMA AYARLARI (GÜNCEL: SADECE SEÇİLENLERİ YAZDIR) */
         @media print { 
             body, .container, #appContainer { background-color: white !important; margin: 0; padding: 0; }
             .input-panel, .filter-bar, .backup-controls, .tools-bar, #loginOverlay, .no-print { display: none !important; } 
             
-            /* Sahiplik Etiketlerini Gizle (İSTEK 2) */
+            /* Sahiplik Etiketlerini Gizle */
             .badge-own, .badge-shared { display: none !important; }
             
             .print-only { display: table-cell !important; } 
             #appContainer { display: block !important; } 
             
-            /* v56 Tablo Stili (Kenarlıklar ve Sıkıştırma) */
             table { width: 100%; border-collapse: collapse; font-size: 10px; border: 1px solid #ccc; }
             th { background-color: #f1f1f1 !important; color: black !important; border: 1px solid #ccc; padding: 5px; text-transform: uppercase; font-weight: 800; }
             td { border: 1px solid #ccc; padding: 5px; vertical-align: top; }
@@ -179,6 +177,17 @@
             
             thead { display: table-header-group !important; }
             tr { display: table-row !important; }
+
+            /* ÖNEMLİ: Seçilen Modu Aktifse, Seçili Olmayanları Gizle */
+            body.print-selected-mode tbody tr:not(.row-selected) {
+                display: none !important;
+            }
+            
+            /* Yazdırırken Checkbox sütununu gizle ki rapor temiz görünsün */
+            body.print-selected-mode .select-col-header, 
+            body.print-selected-mode .select-col-cell {
+                display: none !important;
+            }
         }
     </style>
 </head>
@@ -187,7 +196,7 @@
 <div id="loginOverlay">
     <div class="login-box">
         <h2>🔒 GÜVENLİ GİRİŞ</h2>
-        <p>KaracabayRE.EST v65</p>
+        <p>KaracabayRE.EST v66</p>
         <input type="password" id="loginPin" placeholder="Şifre (1923)" inputmode="numeric">
         <button onclick="checkLogin()">GİRİŞ YAP</button>
     </div>
@@ -197,7 +206,7 @@
     <div class="container">
         <header>
             <div class="app-title-group">
-                <h1>🏢 KARACABAYRE.EST <span style="font-size:12px; color:#27ae60; border:1px solid #27ae60; padding:2px 8px; border-radius:10px; vertical-align:middle;">v65</span></h1>
+                <h1>🏢 KARACABAYRE.EST <span style="font-size:12px; color:#27ae60; border:1px solid #27ae60; padding:2px 8px; border-radius:10px; vertical-align:middle;">v66</span></h1>
                 <div class="app-subtitle">🏠 EMLAK ASİSTANI</div>
             </div>
             <div class="backup-controls">
@@ -327,7 +336,7 @@
             </thead>
             <tbody id="tableBody"></tbody>
         </table>
-        <div class="legal-footer" style="margin-top:20px; font-size:12px; color:#aaa; text-align:center;">Veriler yerel tarayıcıda saklanır. (v65)</div>
+        <div class="legal-footer" style="margin-top:20px; font-size:12px; color:#aaa; text-align:center;">Veriler yerel tarayıcıda saklanır. (v66)</div>
     </div>
 </div>
 
@@ -906,57 +915,6 @@
         document.getElementById('inpOwnership').value = "BANA AİT";
         document.getElementById('inpCity').value = "Antalya";
         handleCityChange('inpCity', 'inpDistrict', 'dl_mahalle_ekle');
-    }
-
-    function renderChecklist() { 
-        const c = document.getElementById('checklistContainer'); c.innerHTML = ''; 
-        const badge = document.getElementById('chkBadge');
-        const pendingCount = checklist.filter(item => !item.done).length;
-        badge.innerText = pendingCount; badge.style.display = pendingCount > 0 ? 'inline-block' : 'none'; 
-        if(checklist.length === 0) { c.innerHTML = '<div style="padding:15px; color:#999; text-align:center;">Henüz hatırlatma yok.</div>'; return; } 
-        checklist.forEach((item, index) => { 
-            const cls = item.done ? 'checked' : ''; 
-            c.innerHTML += `<div class="checklist-item ${cls}"><div style="display:flex; align-items:center; cursor:pointer; flex:1;" onclick="toggleCheck(${index})"><i class="fa-regular ${item.done ? 'fa-square-check' : 'fa-square'}" style="color:${item.done ? '#27ae60':'#ccc'}; font-size:18px;"></i><span style="margin-left:10px; flex:1;">${item.text}</span></div><button onclick="deleteCheck(${index})" style="background:none; border:none; color:#c0392b; cursor:pointer;"><i class="fa-solid fa-trash"></i></button></div>`; 
-        }); 
-    }
-    
-    function addCheckItem() { const t = document.getElementById('newCheckItem').value; if(!t) return; checklist.push({text: t, done: false}); localStorage.setItem('KaracabayRE_CHK_v1', JSON.stringify(checklist)); document.getElementById('newCheckItem').value=''; renderChecklist(); }
-    function toggleCheck(i) { checklist[i].done = !checklist[i].done; localStorage.setItem('KaracabayRE_CHK_v1', JSON.stringify(checklist)); renderChecklist(); }
-    function deleteCheck(i) { if(confirm('Silinsin mi?')) { checklist.splice(i, 1); localStorage.setItem('KaracabayRE_CHK_v1', JSON.stringify(checklist)); renderChecklist(); } }
-    
-    function autoResize(el) { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; }
-    function formatPhone(input) { let n = input.value.replace(/\D/g, ''); if(n.length===0){input.value='';return;} if(n[0]!=='0') n='0'+n; n=n.substring(0,11); input.value = n.replace(/(\d{4})(\d{3})(\d{2})(\d{2})/, "$1 $2 $3 $4"); }
-    function formatCurrency(input) { let v=input.value.replace(/\D/g, ''); input.value=v.replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
-    function parsePrice(v) { return v ? parseInt(v.toString().replace(/\./g,'')) : 0; }
-    function openModal(id) { document.getElementById(id).style.display = 'block'; document.body.classList.add('no-scroll'); }
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; document.body.classList.remove('no-scroll'); }
-    function closeModalOutside(e, id) { if(e.target == document.getElementById(id)) closeModal(id); }
-    function saveToDisk() { localStorage.setItem('KaracabayRE_EST_DB_v19', JSON.stringify(portfolio)); }
-    function downloadData() { const d = { portfolio: portfolio, crm: crmData, checklist: checklist, imarLinks: imarLinks }; const a = document.createElement('a'); a.href = "data:text/plain;charset=utf-8," + encodeURIComponent(JSON.stringify(d)); a.download = "Karacabay_Yedek.json"; document.body.appendChild(a); a.click(); a.remove(); }
-    
-    function uploadData(input) { 
-        const f = input.files[0]; if(!f) return; const r = new FileReader(); 
-        r.onload = e => { 
-            try { const d = JSON.parse(e.target.result); 
-                if(confirm("Yedek yüklensin mi?")) { 
-                    if(d.portfolio) { portfolio=d.portfolio; crmData=d.crm||{investors:[],network:[]}; checklist=d.checklist||[]; imarLinks=d.imarLinks||[]; }
-                    else if(Array.isArray(d)) { portfolio=d; }
-                    saveToDisk(); localStorage.setItem('KaracabayRE_CRM_v19', JSON.stringify(crmData)); localStorage.setItem('KaracabayRE_CHK_v1', JSON.stringify(checklist)); localStorage.setItem('KaracabayRE_IMAR_v1', JSON.stringify(imarLinks));
-                    alert("Yüklendi!"); renderTable(); renderChecklist(); input.value = '';
-                } 
-            } catch(err) { alert("Hata: " + err); input.value = ''; }
-        }; r.readAsText(f); 
-    }
-    
-    function deleteFromForm() { if(confirm('SİLİNECEK!')) { portfolio = portfolio.filter(item => item.id !== editingId); saveToDisk(); renderTable(); resetForm(); } }
-    
-    function populateSelects() { 
-        const iC = document.getElementById('inpCity'); const fC = document.getElementById('filterCity');
-        iC.innerHTML = '<option value="Antalya">Antalya</option>'; fC.innerHTML = '<option value="all">Tüm İller</option><option value="Antalya">Antalya</option>';
-        Object.keys(turkiyeData).sort().forEach(city => { if(city !== "Antalya") { iC.innerHTML += `<option value="${city}">${city}</option>`; fC.innerHTML += `<option value="${city}">${city}</option>`; }});
-        handleCityChange('inpCity', 'inpDistrict', 'dl_mahalle_ekle'); fC.value = "Antalya"; handleCityChange('filterCity', 'filterDistrict', 'dl_mahalle_filtre');
-        const tS=document.getElementById('inpType'), fT=document.getElementById('filterType'); typeList.forEach(t=>{tS.innerHTML+=`<option>${t}</option>`;fT.innerHTML+=`<option>${t}</option>`;});
-        const fL=document.getElementById('inpFloor'); floorList.forEach(f=>fL.innerHTML+=`<option>${f}</option>`); 
     }
 
     // CRM
