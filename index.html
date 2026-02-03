@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KARACABAYRE.EST - v61 (Classic + Excel)</title>
+    <title>KARACABAYRE.EST - v62 (Final Optimize)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -21,7 +21,7 @@
             --whatsapp: #25D366;
             --excel: #217346;
         }
-        body { font-family: 'Segoe UI', sans-serif; background: #eef2f3; margin: 0; padding: 20px; color: #333; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eef2f3; margin: 0; padding: 10px; color: #333; }
         
         /* Giriş Ekranı */
         #loginOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #2c3e50; z-index: 99999; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; }
@@ -31,16 +31,16 @@
 
         /* Ana Yapı */
         #appContainer { display: none; }
-        .container { max-width: 1800px; margin: 0 auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .container { max-width: 1800px; margin: 0 auto; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         
-        /* HEADER DÜZENLEMESİ */
+        /* HEADER */
         header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #eee; padding-bottom: 15px; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
-        .app-title-group h1 { margin: 0; line-height: 1; }
-        .app-subtitle { font-size: 16px; font-weight: 800; color: #7f8c8d; letter-spacing: 3px; margin-top: 8px; margin-left: 2px; text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
+        .app-title-group h1 { margin: 0; line-height: 1; font-size: 24px; }
+        .app-subtitle { font-size: 14px; font-weight: 800; color: #7f8c8d; letter-spacing: 2px; margin-top: 5px; text-transform: uppercase; }
         
         /* Toolbar */
-        .tools-bar { display: flex; gap: 10px; background: var(--tool-bg); padding: 10px; border-radius: 6px; margin-bottom: 25px; border: 1px solid #ddd; flex-wrap: wrap; }
-        .tool-btn { border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: 700; color: white; display: flex; align-items: center; gap: 8px; transition: all 0.2s; text-decoration: none; position: relative; }
+        .tools-bar { display: flex; gap: 8px; background: var(--tool-bg); padding: 8px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #ddd; flex-wrap: wrap; }
+        .tool-btn { border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: 700; color: white; display: flex; align-items: center; gap: 6px; transition: all 0.2s; text-decoration: none; position: relative; }
         .tool-btn:hover { opacity: 0.9; transform: translateY(-1px); }
         .btn-unutma { background-color: var(--danger); }
         .btn-crm { background-color: var(--accent); }
@@ -48,108 +48,102 @@
         .btn-link { background-color: var(--link-color); }
         .btn-excel { background-color: var(--excel); }
         .btn-backup { background: #f39c12; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 13px; }
-
-        .notification-badge { position: absolute; top: -8px; right: -8px; background-color: red; color: white; border-radius: 50%; padding: 4px 7px; font-size: 10px; border: 2px solid white; display: none; }
+        .notification-badge { position: absolute; top: -8px; right: -8px; background-color: red; color: white; border-radius: 50%; padding: 3px 6px; font-size: 10px; border: 2px solid white; display: none; }
 
         /* Form Alanı */
-        .input-panel { background: #fdfdfd; padding: 20px; border: 1px solid #ddd; border-left: 6px solid var(--primary); margin-bottom: 30px; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; }
-        .form-group label { display: block; font-size: 11px; font-weight: 700; margin-bottom: 5px; color: #555; text-transform: uppercase; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; box-sizing: border-box; }
+        .input-panel { background: #fdfdfd; padding: 15px; border: 1px solid #ddd; border-left: 6px solid var(--primary); margin-bottom: 20px; border-radius: 4px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+        .form-group label { display: block; font-size: 11px; font-weight: 700; margin-bottom: 4px; color: #555; text-transform: uppercase; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; box-sizing: border-box; }
         .currency-group { display: flex; gap: 5px; }
         .currency-group select { width: 70px; flex-shrink: 0; background: #eee; font-weight: bold; }
-        .auth-box { grid-column: span 2; display: flex; gap: 15px; background: #eafaf1; padding: 15px; border: 1px dashed var(--accent); border-radius: 6px; }
-        .form-buttons { grid-column: span 2; display: flex; gap: 10px; margin-top: 10px; }
-        .btn-save { background: var(--accent); color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer; font-weight: bold; flex: 2; }
-        .btn-delete-rec { background: var(--danger); color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer; font-weight: bold; display: none; }
-        .btn-cancel { background: #7f8c8d; color: white; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; display: none; }
+        .auth-box { grid-column: span 2; display: flex; gap: 10px; background: #eafaf1; padding: 10px; border: 1px dashed var(--accent); border-radius: 6px; }
+        
+        /* YENİ BUTON VE AÇIKLAMA DÜZENİ */
+        .form-footer-row { grid-column: span 2; display: flex; align-items: flex-end; gap: 10px; margin-top: 5px; }
+        .desc-container { flex-grow: 1; }
+        .action-container { display: flex; gap: 5px; flex-shrink: 0; }
+        .btn-save { background: var(--accent); color: white; border: none; padding: 10px 25px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 14px; height: 42px; display: flex; align-items: center; justify-content: center; }
+        .btn-delete-rec { background: var(--danger); color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer; font-weight: bold; display: none; height: 42px; }
+        .btn-cancel { background: #7f8c8d; color: white; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; display: none; margin-left: auto; }
 
-        /* Tablo ve Liste (v56 STİLİ) */
-        .table-scroll-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 20px; border: 1px solid #eee; border-radius: 6px; }
-        table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 1000px; /* Mobilde kaydırma için min genişlik */ }
-        th { background: #34495e; color: white; padding: 12px; text-align: left; vertical-align: middle; white-space: nowrap; }
-        td { padding: 10px; border-bottom: 1px solid #eee; vertical-align: middle; word-wrap: break-word; }
+        /* Tablo (v56 TARZI - SIKIŞTIRILMIŞ) */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; table-layout: fixed; /* Tabloyu ekrana sığdırır */ }
+        th { background: #34495e; color: white; padding: 8px 4px; text-align: left; vertical-align: middle; word-wrap: break-word; font-size: 11px; }
+        td { padding: 6px 4px; border-bottom: 1px solid #eee; vertical-align: top; word-wrap: break-word; /* İçeriği aşağı kaydırır */ }
         tr:hover { background: #f9f9f9; }
         
         tr.row-sold { background-color: #fff5f5; color: #999; }
         tr.row-rented { background-color: #fcf8e3; color: #777; }
         tr.row-selected { background-color: #d1f2eb !important; }
         
-        .badge { padding: 3px 6px; border-radius: 3px; color: white; font-size: 10px; font-weight: bold; display:inline-block; margin-bottom: 2px; }
+        .badge { padding: 2px 4px; border-radius: 3px; color: white; font-size: 9px; font-weight: bold; display:inline-block; margin-bottom: 2px; }
         .satilik { background: #27ae60; } .kiralik { background: #e67e22; } .kirmizi-etiket { background: var(--sold) !important; }
         .badge-own { background: var(--secondary); } .badge-shared { background: var(--shared); }
-        .badge-sicak { background: #e74c3c; } .badge-ilik { background: #f39c12; } .badge-soguk { background: #95a5a6; }
-        
-        /* v56 CRM BADGE STİLLERİ */
-        .badge-crm-safe { background: #27ae60; color:white; font-size:12px; padding:6px 10px; border-radius:4px; display:inline-block; min-width:80px; text-align:center; }
-        .badge-crm-danger { background: #c0392b; color:white; font-size:13px; font-weight:900; padding:6px 10px; border-radius:4px; display:inline-block; min-width:80px; text-align:center; animation: pulse 2s infinite; }
-        
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-
-        .type-text { display: block; font-weight: 900; text-transform: uppercase; font-size: 12px; margin-top: 3px; color: #444; }
+        .type-text { display: block; font-weight: 900; text-transform: uppercase; font-size: 10px; margin-top: 2px; color: #444; }
         
         /* Linkler */
-        .direct-link-btn { display: inline-block; background-color: #3498db; color: white; text-decoration: none; padding: 4px 8px; border-radius: 3px; font-size: 11px; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; font-weight: 600; }
-        .link-sahibinden { background-color: #f1c40f; color: black; } 
-        .link-hepsi { background-color: #e74c3c; } 
-        .link-maps { background-color: #27ae60; color: white; } 
-        .link-dosya { background-color: #95a5a6; border: 1px solid #7f8c8d; }
+        .direct-link-btn { display: inline-block; background-color: #3498db; color: white; text-decoration: none; padding: 3px 6px; border-radius: 3px; font-size: 10px; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; font-weight: 600; }
+        .link-sahibinden { background-color: #f1c40f; color: black; } .link-hepsi { background-color: #e74c3c; } 
+        .link-maps { background-color: #27ae60; color: white; } .link-dosya { background-color: #95a5a6; border: 1px solid #7f8c8d; }
 
         /* Filtre */
-        .filter-bar { background: var(--primary); padding: 15px; border-radius: 6px; display: flex; gap: 10px; flex-wrap: wrap; color: white; align-items: center; }
-        .filter-bar input, .filter-bar select { padding: 8px; border: none; border-radius: 4px; color: #333; }
-        .btn-clear-filter { background: #95a5a6; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; margin-left: auto; }
+        .filter-bar { background: var(--primary); padding: 12px; border-radius: 6px; display: flex; gap: 8px; flex-wrap: wrap; color: white; align-items: center; }
+        .filter-bar input, .filter-bar select { padding: 6px; border: none; border-radius: 4px; color: #333; font-size: 12px; }
+        .btn-clear-filter { background: #95a5a6; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; margin-left: auto; }
+        .btn-print-selected { background: #8e44ad; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; display:flex; align-items:center; gap:5px; font-size: 11px; }
+        .btn-whatsapp-selected { background: var(--whatsapp); color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; display:flex; align-items:center; gap:5px; font-size: 11px; }
 
-        /* Butonlar */
-        .btn-print-selected { background: #8e44ad; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; display:flex; align-items:center; gap:5px; }
-        .btn-whatsapp-selected { background: var(--whatsapp); color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; display:flex; align-items:center; gap:5px; margin-left:5px; }
+        /* CRM Badges */
+        .badge-crm-safe { background: #27ae60; color:white; font-size:11px; padding:4px 8px; border-radius:4px; }
+        .badge-crm-danger { background: #c0392b; color:white; font-size:11px; font-weight:bold; padding:4px 8px; border-radius:4px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
         /* Modals */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; overflow-y: hidden; }
-        .modal-content { background: white; margin: 3% auto; padding: 25px; width: 95%; border-radius: 8px; position: relative; max-height: 85vh; display: flex; flex-direction: column; overflow-y: auto; }
-        .tool-modal-content { width: 450px; margin: 10% auto; }
+        .modal-content { background: white; margin: 2% auto; padding: 20px; width: 95%; border-radius: 8px; position: relative; max-height: 90vh; display: flex; flex-direction: column; overflow-y: auto; }
+        .tool-modal-content { width: 400px; max-width: 90%; margin: 10% auto; }
         .checklist-item { display: flex; align-items: center; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; }
         .checklist-item.checked span { text-decoration: line-through; color: #aaa; }
-        
+
+        /* İmar */
+        .imar-list-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-height: 250px; overflow-y: auto; padding: 5px; border: 1px solid #eee; background: #fdfdfd; border-radius: 4px; margin-bottom: 15px; }
+        .btn-imar-select { padding: 10px; background: #34495e; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px; display: flex; align-items: center; justify-content: space-between; }
+        .btn-imar-delete { background: #c0392b; color: white; border:none; border-radius: 3px; width: 20px; height: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-left: 5px; }
+
+        /* Hesap Makinesi & Tablar */
+        .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .calc-btn { padding: 12px; font-size: 18px; cursor: pointer; background: #eee; border: none; border-radius: 4px; } 
+        .calc-btn.op { background: var(--secondary); color: white; } .calc-btn.eq { background: var(--accent); color: white; grid-column: span 2; }
+        .calc-screen { width: 95%; padding: 10px; font-size: 24px; text-align: right; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        .tab-buttons { display: flex; border-bottom: 1px solid #ddd; margin-bottom: 15px; overflow-x: auto; }
+        .tab-btn { flex: 1; padding: 10px; border: none; background: none; cursor: pointer; white-space: nowrap; border-bottom: 3px solid transparent; }
+        .tab-btn.active { border-bottom-color: var(--secondary); color: var(--secondary); font-weight: bold; }
+        .tab-content { display: none; } .tab-content.active { display: block; }
         .crm-header { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; overflow-x: auto; }
         .crm-tab { padding: 10px 20px; cursor: pointer; font-weight: bold; border-radius: 6px; border: 1px solid #eee; background: #f9f9f9; white-space: nowrap; }
         .crm-tab.active { background: var(--accent); color: white; border-color: var(--accent); }
         .crm-input-panel { background: #f1f2f6; padding: 15px; border-radius: 6px; margin-bottom: 15px; border-left: 5px solid var(--accent); }
-        .crm-input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+        .crm-input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
         .crm-buttons { display: flex; gap: 10px; margin-top: 15px; }
-        
-        /* İmar Liste */
-        .imar-list-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-height: 250px; overflow-y: auto; padding: 5px; border: 1px solid #eee; background: #fdfdfd; border-radius: 4px; margin-bottom: 15px; }
-        .btn-imar-select { padding: 12px; background: #34495e; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 13px; display: flex; align-items: center; justify-content: space-between; }
-        .btn-imar-select:hover { background: #e67e22; }
-        .btn-imar-delete { background: #c0392b; color: white; border:none; border-radius: 3px; width: 20px; height: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-left: 5px; }
 
-        .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        .calc-btn { padding: 15px; font-size: 18px; cursor: pointer; background: #eee; border: none; border-radius: 4px; } 
-        .calc-btn.op { background: var(--secondary); color: white; } .calc-btn.eq { background: var(--accent); color: white; grid-column: span 2; }
-        .calc-screen { width: 95%; padding: 10px; font-size: 24px; text-align: right; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; }
-        .currency-board { display: flex; flex-direction: column; gap: 15px; }
-        .currency-row { display: flex; align-items: center; justify-content: space-between; background: #f9f9f9; padding: 10px; border-radius: 6px; border: 1px solid #eee; }
-        .result-box { margin-top: 15px; padding: 10px; background: #f0f9ff; border: 1px solid #bce8f1; color: #31708f; font-weight: bold; border-radius: 4px; text-align: center; font-size: 1.1em; }
-        .tab-buttons { display: flex; border-bottom: 1px solid #ddd; margin-bottom: 15px; overflow-x: auto; }
-        .tab-btn { flex: 1; padding: 10px; border: none; background: none; cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; }
-        .tab-btn.active { border-bottom-color: var(--secondary); color: var(--secondary); font-weight: bold; }
-        .tab-content { display: none; } .tab-content.active { display: block; }
-        
         .print-only { display: none; }
-        
+
+        @media screen and (max-width: 900px) {
+            .form-footer-row { flex-direction: column; align-items: stretch; }
+            .btn-save { width: 100%; margin-top: 5px; }
+            /* V56 tarzı sıkıştırma, scroll yok */
+            .select-col-header, .select-col-cell { width: 20px !important; }
+        }
+
         @media print { 
-            body, .container, #appContainer { background-color: white !important; -webkit-print-color-adjust: exact; margin: 0; padding: 0; }
-            .input-panel, .filter-bar, .backup-controls, .tools-bar, #loginOverlay, .no-print, .btn-print-selected, .btn-whatsapp-selected { display: none !important; } 
+            body, .container, #appContainer { background-color: white !important; margin: 0; padding: 0; }
+            .input-panel, .filter-bar, .backup-controls, .tools-bar, #loginOverlay, .no-print { display: none !important; } 
             .print-only { display: table-cell !important; } 
             #appContainer { display: block !important; } 
-            table, th, td, tr { background-color: white !important; border: 1px solid #ddd; padding: 3px !important; color: black; vertical-align: top; }
-            table { width: 100%; font-size: 9px; } 
-            .badge { display: inline-block; margin-bottom: 1px; font-size: 8px !important; border: 1px solid #ccc; padding: 1px 2px; }
-            td br { display: block; margin: 1px 0; }
-            body.print-selected-mode tbody tr:not(.row-selected) { display: none !important; }
-            body.print-selected-mode .select-col-header, body.print-selected-mode .select-col-cell { display: none !important; }
-            body.print-selected-mode tbody tr.row-selected { background-color: white !important; }
+            table, th, td, tr { display: table-row-group !important; border: 1px solid #ddd; padding: 2px !important; font-size: 8px; }
+            thead { display: table-header-group !important; }
+            tr { display: table-row !important; }
         }
     </style>
 </head>
@@ -158,7 +152,7 @@
 <div id="loginOverlay">
     <div class="login-box">
         <h2>🔒 GÜVENLİ GİRİŞ</h2>
-        <p>KaracabayRE.EST v61</p>
+        <p>KaracabayRE.EST v62</p>
         <input type="password" id="loginPin" placeholder="Şifre (1923)" inputmode="numeric">
         <button onclick="checkLogin()">GİRİŞ YAP</button>
     </div>
@@ -168,35 +162,35 @@
     <div class="container">
         <header>
             <div class="app-title-group">
-                <h1>🏢 KARACABAYRE.EST <span style="font-size:12px; color:#27ae60; border:1px solid #27ae60; padding:2px 8px; border-radius:10px; vertical-align:middle;">v61</span></h1>
-                <div class="app-subtitle">🏠 EMLAK ASİSTANI (KLASİK + EXCEL)</div>
+                <h1>🏢 KARACABAYRE.EST <span style="font-size:12px; color:#27ae60; border:1px solid #27ae60; padding:2px 8px; border-radius:10px; vertical-align:middle;">v62</span></h1>
+                <div class="app-subtitle">🏠 EMLAK ASİSTANI (FİNAL)</div>
             </div>
             <div class="backup-controls">
                 <input type="file" id="fileUpload" style="display:none;" onclick="this.value=null" onchange="uploadData(this)">
-                <button class="btn-backup" onclick="document.getElementById('fileUpload').click()">📂 YÜKLE</button>
-                <button class="btn-backup" onclick="downloadData()">💾 YEDEKLE</button>
+                <button class="btn-backup" onclick="document.getElementById('fileUpload').click()"><i class="fa-solid fa-folder-open"></i> YÜKLE</button>
+                <button class="btn-backup" onclick="downloadData()"><i class="fa-solid fa-floppy-disk"></i> YEDEKLE</button>
             </div>
         </header>
 
         <div class="tools-bar">
             <button class="tool-btn btn-unutma" onclick="openModal('checklistModal'); renderChecklist();">
-                <i class="fa-solid fa-bell"></i> UNUTMA!
+                <i class="fa-solid fa-bell"></i> UNUTMA
                 <span id="chkBadge" class="notification-badge">0</span>
             </button>
             
             <button class="tool-btn btn-crm" onclick="openCRM()"><i class="fa-solid fa-users"></i> CRM</button>
-            <button class="tool-btn btn-calc" onclick="openModal('calcModal')"><i class="fa-solid fa-calculator"></i> Hesap Mak.</button>
-            <button class="tool-btn btn-calc" onclick="openModal('currencyModal'); fetchCurrency();"><i class="fa-solid fa-money-bill-transfer"></i> Döviz</button>
-            <button class="tool-btn btn-calc" onclick="openModal('realEstateCalcModal')"><i class="fa-solid fa-file-contract"></i> Emlak</button>
-            <a href="https://parselsorgu.tkgm.gov.tr/" target="_blank" class="tool-btn btn-link"><i class="fa-solid fa-map-location-dot"></i> TKGM Parsel</a>
-            <button class="tool-btn btn-link" onclick="openModal('eImarModal'); renderImarButtons();"><i class="fa-solid fa-city"></i> BELEDİYELER</button>
+            <button class="tool-btn btn-calc" onclick="openModal('calcModal')"><i class="fa-solid fa-calculator"></i> HESAP</button>
+            <button class="tool-btn btn-calc" onclick="openModal('currencyModal'); fetchCurrency();"><i class="fa-solid fa-money-bill-transfer"></i> DÖVİZ</button>
+            <button class="tool-btn btn-calc" onclick="openModal('realEstateCalcModal')"><i class="fa-solid fa-file-contract"></i> EMLAK</button>
+            <a href="https://parselsorgu.tkgm.gov.tr/" target="_blank" class="tool-btn btn-link"><i class="fa-solid fa-map-location-dot"></i> TKGM</a>
+            <button class="tool-btn btn-link" onclick="openModal('eImarModal'); renderImarButtons();"><i class="fa-solid fa-city"></i> BELEDİYE</button>
             <button class="tool-btn btn-excel" onclick="exportToExcel()"><i class="fa-solid fa-file-excel"></i> EXCEL</button>
         </div>
 
         <div class="input-panel">
-            <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:10px; align-items:center;">
                 <span id="formTitle" style="font-weight:bold; color:var(--primary); font-size:1.1em;">➕ Yeni Portföy Ekle</span>
-                <button id="btnCancel" class="btn-cancel" onclick="resetForm()">TEMİZLE / İPTAL</button>
+                <button id="btnCancel" class="btn-cancel" onclick="resetForm()">İPTAL</button>
             </div>
             <div class="form-grid">
                 <div class="form-group"><label>PORTFÖY SAHİBİ</label><select id="inpOwnership"><option>BANA AİT</option><option>PAYLAŞIMLI</option></select></div>
@@ -207,18 +201,18 @@
                 
                 <div class="form-group">
                     <label>İlçe</label>
-                    <input type="text" list="dl_ilce_ekle" id="inpDistrict" placeholder="Seçiniz veya Yazınız" oninput="loadMahalleler('inpCity', 'inpDistrict', 'dl_mahalle_ekle')" autocomplete="off">
+                    <input type="text" list="dl_ilce_ekle" id="inpDistrict" placeholder="Seç/Yaz" oninput="loadMahalleler('inpCity', 'inpDistrict', 'dl_mahalle_ekle')" autocomplete="off">
                     <datalist id="dl_ilce_ekle"></datalist>
                 </div>
 
                 <div class="form-group"><label>Mahalle</label><input type="text" list="dl_mahalle_ekle" id="inpNeighborhood" placeholder="Yazınız" autocomplete="off"><datalist id="dl_mahalle_ekle"></datalist></div>
                 
-                <div class="form-group"><label>Oda Sayısı</label><input type="text" id="inpRooms" placeholder="Örn: 3+1, 5+2"></div>
+                <div class="form-group"><label>Oda</label><input type="text" id="inpRooms" placeholder="3+1"></div>
                 
-                <div class="form-group"><label>Bulunduğu Kat</label><select id="inpFloor"></select></div>
-                <div class="form-group"><label>Bina Kat Sayısı</label><input type="number" id="inpFloorCount" placeholder="Manuel"></div>
-                <div class="form-group"><label>Brüt m²</label><input type="number" id="inpGross" placeholder="m²"></div>
-                <div class="form-group"><label>Net m²</label><input type="number" id="inpNet" placeholder="m²"></div>
+                <div class="form-group"><label>Kat</label><select id="inpFloor"></select></div>
+                <div class="form-group"><label>Kat Sayısı</label><input type="number" id="inpFloorCount"></div>
+                <div class="form-group"><label>Brüt m²</label><input type="number" id="inpGross"></div>
+                <div class="form-group"><label>Net m²</label><input type="number" id="inpNet"></div>
                 <div class="form-group"><label>Fiyat</label>
                     <div class="currency-group">
                         <input type="text" id="inpPrice" placeholder="5.000.000" oninput="formatCurrency(this)">
@@ -230,93 +224,94 @@
                     <div class="form-group" style="flex:1;"><label>Yetki Bitiş</label><input type="date" id="inpAuthEnd"></div>
                 </div>
                 <div class="form-group"><label>Müşteri Ad Soyad</label><input type="text" id="inpRef"></div>
-                <div class="form-group"><label>Müşteri Telefon</label><input type="text" id="inpPhone" placeholder="0 (5XX) XXX XX XX" maxlength="17" oninput="formatPhone(this)"></div>
-                <div class="form-group"><label>Dosya / Link / Konum</label><textarea id="inpLink" placeholder="Link, Konum Linki veya Dosya Yolu..." rows="1" class="auto-expand" oninput="autoResize(this)"></textarea></div>
-                <div class="form-group" style="grid-column:span 2;"><label>Açıklama</label><textarea id="inpDesc" class="auto-expand" placeholder="Detaylı açıklama..." oninput="autoResize(this)"></textarea></div>
-                <div class="form-buttons">
-                    <button id="btnSave" class="btn-save" onclick="handleSave()">KAYDET</button>
-                    <button id="btnDelete" class="btn-delete-rec" onclick="deleteFromForm()">🗑️ SİL</button>
+                
+                <div class="form-group"><label>Müşteri Telefon</label><input type="text" id="inpPhone" placeholder="0 (5XX)..." maxlength="17" oninput="formatPhone(this)"></div>
+                
+                <div class="form-group"><label>Dosya / Link</label><textarea id="inpLink" placeholder="Linkler..." rows="1" class="auto-expand" oninput="autoResize(this)"></textarea></div>
+
+                <div class="form-footer-row">
+                    <div class="form-group desc-container">
+                        <label>Açıklama</label>
+                        <textarea id="inpDesc" class="auto-expand" placeholder="Detaylar..." oninput="autoResize(this)" style="height:42px;"></textarea>
+                    </div>
+                    <div class="action-container">
+                        <button id="btnSave" class="btn-save" onclick="handleSave()">KAYDET</button>
+                        <button id="btnDelete" class="btn-delete-rec" onclick="deleteFromForm()">SİL</button>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="filter-bar">
-            <span>🔍 ARA:</span> <input type="text" id="searchBox" placeholder="İsim, Tel, Not..." onkeyup="renderTable()" style="width:140px;">
-            <select id="filterOwnership" onchange="renderTable()" style="width:120px;"><option value="all">Tüm Portföyler</option><option>BANA AİT</option><option>PAYLAŞIMLI</option></select>
-            <select id="filterType" onchange="renderTable()" style="width:130px;"><option value="all">Tüm Menkuller</option></select>
-            <select id="filterStatus" onchange="renderTable()" style="width:110px;"><option value="all">Durum</option><option>Satılık</option><option>Kiralık</option><option>Devren</option><option style="color:red;">Satıldı</option><option style="color:red;">Kiralandı</option></select>
+            <span>🔍</span> <input type="text" id="searchBox" placeholder="Ara..." onkeyup="renderTable()" style="width:100px;">
+            <select id="filterOwnership" onchange="renderTable()"><option value="all">Tüm</option><option>BANA AİT</option><option>PAYLAŞIMLI</option></select>
+            <select id="filterType" onchange="renderTable()"><option value="all">Tüm Tür</option></select>
+            <select id="filterStatus" onchange="renderTable()"><option value="all">Durum</option><option>Satılık</option><option>Kiralık</option><option>Devren</option><option style="color:red;">Satıldı</option><option style="color:red;">Kiralandı</option></select>
             
-            <select id="filterCity" onchange="handleCityChange('filterCity', 'filterDistrict', 'dl_mahalle_filtre'); renderTable()" style="width:110px;">
+            <select id="filterCity" onchange="handleCityChange('filterCity', 'filterDistrict', 'dl_mahalle_filtre'); renderTable();">
                 </select>
             
-            <select id="filterDistrict" onchange="loadMahalleler('filterCity', 'filterDistrict', 'dl_mahalle_filtre'); renderTable()"><option value="all">İlçe</option></select>
-            <input type="text" list="dl_mahalle_filtre" id="filterNeighborhood" placeholder="Mahalle" onkeyup="renderTable()" style="width:100px;" autocomplete="off"><datalist id="dl_mahalle_filtre"></datalist>
+            <select id="filterDistrict" onchange="loadMahalleler('filterCity', 'filterDistrict', 'dl_mahalle_filtre'); renderTable();"><option value="all">İlçe</option></select>
+            <input type="text" list="dl_mahalle_filtre" id="filterNeighborhood" placeholder="Mahalle" onkeyup="renderTable()" style="width:80px;" autocomplete="off"><datalist id="dl_mahalle_filtre"></datalist>
             
-            <input type="text" id="filterRooms" placeholder="Oda" onkeyup="renderTable()" style="width:80px;">
-            <input type="text" id="filterMinPrice" placeholder="Min" oninput="formatCurrency(this); renderTable()" style="width:80px;"> 
-            <input type="text" id="filterMaxPrice" placeholder="Max" oninput="formatCurrency(this); renderTable()" style="width:80px;">
-            <button class="btn-clear-filter" onclick="clearFilters()" title="Filtreleri ve Seçimleri Sıfırla"><i class="fa-solid fa-rotate-left"></i> TEMİZLE</button>
+            <input type="text" id="filterRooms" placeholder="Oda" onkeyup="renderTable()" style="width:50px;">
+            <input type="text" id="filterMinPrice" placeholder="Min" oninput="formatCurrency(this); renderTable()" style="width:60px;"> 
+            <input type="text" id="filterMaxPrice" placeholder="Max" oninput="formatCurrency(this); renderTable()" style="width:60px;">
+            <button class="btn-clear-filter" onclick="clearFilters()"><i class="fa-solid fa-rotate-left"></i></button>
             
             <button class="btn-print-selected" onclick="printSelected()">
-                <i class="fa-solid fa-check-double"></i> SEÇİLENLERİ YAZDIR
+                <i class="fa-solid fa-check-double"></i> YAZ
             </button>
             <button class="btn-whatsapp-selected" onclick="sendSelectedToWhatsapp()">
-                <i class="fa-brands fa-whatsapp"></i> WP GÖNDER
+                <i class="fa-brands fa-whatsapp"></i> WP
             </button>
         </div>
 
-        <div class="table-scroll-wrapper">
-            <table id="portfolioTable">
-                <thead>
-                    <tr>
-                        <th width="3%" class="select-col-header no-print">
-                            Seç<br>
-                            <input type="checkbox" id="masterCheckbox" onchange="toggleAllSelections(this)" style="transform:scale(1.3); cursor:pointer;" title="Tümünü Seç/Kaldır">
-                        </th> 
-                        <th width="10%">Tür / Durum</th>
-                        <th width="12%">Lokasyon</th>
-                        <th width="8%">Özellikler</th>
-                        <th width="10%">m² (Brüt/Net)</th>
-                        <th width="11%">Fiyat</th>
-                        <th width="14%">Müşteri / Tel</th>
-                        <th width="9%">Yetki</th>
-                        <th class="no-print" width="6%" style="text-align:center;">Linkler</th>
-                        <th class="no-print" width="5%" style="text-align:center;">Not</th>
-                        <th class="no-print" width="8%">İşlem</th>
-                        <th class="print-only">Açıklama / Notlar</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody"></tbody>
-            </table>
-        </div>
-        <div class="legal-footer">Veriler yerel tarayıcıda saklanır. (v61 Classic + Excel)</div>
+        <table id="portfolioTable">
+            <thead>
+                <tr>
+                    <th width="20" class="select-col-header no-print">
+                        <input type="checkbox" id="masterCheckbox" onchange="toggleAllSelections(this)" style="cursor:pointer;" title="Seç">
+                    </th> 
+                    <th width="12%">TÜR</th>
+                    <th width="15%">Lokasyon</th>
+                    <th width="10%">Özellik</th>
+                    <th width="10%">m² (B/N)</th>
+                    <th width="12%">Fiyat</th>
+                    <th width="12%">Müşteri</th>
+                    <th width="8%">Yetki</th>
+                    <th class="no-print" width="6%" style="text-align:center;">Link</th>
+                    <th class="no-print" width="5%" style="text-align:center;">Not</th>
+                    <th class="no-print" width="8%">İşlem</th>
+                    <th class="print-only">Açıklama</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+        <div class="legal-footer" style="margin-top:20px; font-size:12px; color:#aaa; text-align:center;">Veriler yerel tarayıcıda saklanır. (v62)</div>
     </div>
 </div>
 
 <div id="eImarModal" class="modal" onclick="closeModalOutside(event, 'eImarModal')">
     <div class="modal-content tool-modal-content" style="width:500px;">
         <div style="display:flex;justify-content:space-between; margin-bottom:15px; border-bottom:2px solid #e67e22; padding-bottom:10px;">
-            <h3 style="color:#e67e22; margin:0;"><i class="fa-solid fa-city"></i> İmar ve Belediye Sorgu</h3>
+            <h3 style="color:#e67e22; margin:0;"><i class="fa-solid fa-city"></i> İmar ve Belediye</h3>
             <span onclick="closeModal('eImarModal')" style="cursor:pointer;font-size:24px;">&times;</span>
         </div>
-        
         <div style="font-size:12px; font-weight:bold; color:#555; margin-bottom:5px;">⭐ KAYITLI BELEDİYELER:</div>
-        <div id="imarListContainer" class="imar-list-container">
-            </div>
-
+        <div id="imarListContainer" class="imar-list-container"></div>
         <div style="background:#f9f9f9; padding:15px; border-radius:6px; border:1px solid #ddd;">
-            <div style="font-size:12px; font-weight:bold; color:#333; margin-bottom:10px;">🔍 YENİ SORGU / LİNK EKLE</div>
+            <div style="font-size:12px; font-weight:bold; color:#333; margin-bottom:10px;">🔍 LİNK EKLE</div>
             <div style="display:flex; gap:5px; margin-bottom:10px;">
-                <input type="text" id="imarCityInput" placeholder="İl (Örn: İstanbul)" style="flex:1; padding:8px; border:1px solid #ccc; border-radius:4px;">
-                <input type="text" id="imarDistInput" placeholder="İlçe (Örn: Beşiktaş)" style="flex:1; padding:8px; border:1px solid #ccc; border-radius:4px;">
+                <input type="text" id="imarCityInput" placeholder="İl" style="flex:1; padding:8px; border:1px solid #ccc; border-radius:4px;">
+                <input type="text" id="imarDistInput" placeholder="İlçe" style="flex:1; padding:8px; border:1px solid #ccc; border-radius:4px;">
             </div>
             <div style="margin-bottom:10px;">
-                <input type="text" id="imarUrlInput" placeholder="Varsa Direkt Link (https://...)" style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;">
-                <div style="font-size:10px; color:#666; margin-top:3px;">*Link yapıştırırsanız 'Ekle', boş bırakırsanız 'Google'da Ara' çalışır.</div>
+                <input type="text" id="imarUrlInput" placeholder="Link (https://...)" style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;">
             </div>
             <div style="display:flex; gap:10px;">
-                <button onclick="searchGoogleImar()" style="flex:1; background:#f39c12; color:white; border:none; padding:10px; border-radius:4px; cursor:pointer; font-weight:bold;"><i class="fa-brands fa-google"></i> Google'da Ara</button>
-                <button onclick="addImarLink()" style="flex:1; background:#27ae60; color:white; border:none; padding:10px; border-radius:4px; cursor:pointer; font-weight:bold;"><i class="fa-solid fa-plus"></i> Listeye Ekle</button>
+                <button onclick="searchGoogleImar()" style="flex:1; background:#f39c12; color:white; border:none; padding:10px; border-radius:4px; cursor:pointer; font-weight:bold;">Google Ara</button>
+                <button onclick="addImarLink()" style="flex:1; background:#27ae60; color:white; border:none; padding:10px; border-radius:4px; cursor:pointer; font-weight:bold;">Ekle</button>
             </div>
         </div>
     </div>
@@ -327,7 +322,7 @@
 <div id="crmModal" class="modal" onclick="closeModalOutside(event, 'crmModal')">
     <div class="modal-content">
         <div style="display:flex;justify-content:space-between; margin-bottom:10px;">
-            <h3>👥 Müşteri İlişkileri (CRM)</h3>
+            <h3>👥 CRM</h3>
             <span onclick="closeModal('crmModal')" style="cursor:pointer;font-size:24px;">&times;</span>
         </div>
         <div class="crm-header">
@@ -336,13 +331,13 @@
         </div>
         <div id="crmInvestors" class="crm-section" style="display:block;">
             <div class="crm-input-panel">
-                <div class="crm-input-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="crm-input-grid" style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));">
                     <div class="form-group"><label>Ad Soyad</label><input type="text" id="invName"></div>
-                    <div class="form-group"><label>Telefon</label><input type="text" id="invPhone" placeholder="05XX..."></div>
+                    <div class="form-group"><label>Telefon</label><input type="text" id="invPhone" oninput="formatPhone(this)" maxlength="17"></div>
                     <div class="form-group"><label>Talep Tipi</label><select id="invType"><option>Daire</option><option>Villa</option><option>Arsa</option><option>İşyeri</option><option>Yatırımlık</option></select></div>
-                    <div class="form-group"><label>Bölge Tercihi</label><input type="text" id="invRegion" placeholder="Lara, Konyaaltı..."></div>
-                    <div class="form-group"><label>Bütçe (Max)</label><input type="text" id="invBudget" oninput="formatCurrency(this)"></div>
-                    <div class="form-group"><label>Durum</label><select id="invStatus"><option value="Sıcak">🔥 Sıcak (Acil)</option><option value="Ilık">⚖️ Ilık (Normal)</option><option value="Soğuk">🧊 Soğuk (Beklemede)</option></select></div>
+                    <div class="form-group"><label>Bölge</label><input type="text" id="invRegion"></div>
+                    <div class="form-group"><label>Bütçe</label><input type="text" id="invBudget" oninput="formatCurrency(this)"></div>
+                    <div class="form-group"><label>Durum</label><select id="invStatus"><option value="Sıcak">🔥 Sıcak</option><option value="Ilık">⚖️ Ilık</option><option value="Soğuk">🧊 Soğuk</option></select></div>
                     <div class="form-group" style="grid-column: span 2;"><label>Notlar</label><textarea id="invNote" rows="1" class="auto-expand"></textarea></div>
                 </div>
                 <div class="crm-buttons">
@@ -353,21 +348,21 @@
             </div>
             <div class="table-scroll-wrapper">
                 <table class="crm-table">
-                    <thead><tr><th width="15%">Ad Soyad</th><th width="12%">Telefon</th><th width="20%">Talep / Bölge</th><th width="13%">Bütçe</th><th width="10%">Durum</th><th width="20%">Notlar</th><th width="10%">İşlem</th></tr></thead>
+                    <thead><tr><th>Ad Soyad</th><th>Tel</th><th>Talep</th><th>Bütçe</th><th>Durum</th><th>Not</th><th>İşlem</th></tr></thead>
                     <tbody id="investorTableBody"></tbody>
                 </table>
             </div>
         </div>
         <div id="crmNetwork" class="crm-section" style="display:none;">
             <div class="crm-input-panel">
-                <div class="crm-input-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="crm-input-grid" style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));">
                     <div class="form-group"><label>Ad Soyad</label><input type="text" id="netName"></div>
-                    <div class="form-group"><label>Telefon</label><input type="text" id="netPhone"></div>
-                    <div class="form-group"><label>Meslek / Unvan</label><input type="text" id="netJob"></div>
+                    <div class="form-group"><label>Telefon</label><input type="text" id="netPhone" oninput="formatPhone(this)" maxlength="17"></div>
+                    <div class="form-group"><label>Meslek</label><input type="text" id="netJob"></div>
                     <div class="form-group"><label>Şehir</label><input type="text" id="netCity" value="Antalya"></div>
-                    <div class="form-group"><label>Yakınlık / Ref.</label><input type="text" id="netRelation" placeholder="Arkadaş, Eski Müşteri..."></div>
+                    <div class="form-group"><label>Yakınlık</label><input type="text" id="netRelation"></div>
                     <div class="form-group"><label>Son Arama</label><input type="date" id="netLastCall"></div>
-                    <div class="form-group" style="grid-column: span 3;"><label>Açıklama / Potansiyel</label><textarea id="netNote" rows="1" class="auto-expand"></textarea></div>
+                    <div class="form-group" style="grid-column: span 2;"><label>Notlar</label><textarea id="netNote" rows="1" class="auto-expand"></textarea></div>
                 </div>
                 <div class="crm-buttons">
                     <button class="btn-save" onclick="saveCRMNetwork()" id="btnNetSave">KAYDET</button>
@@ -377,7 +372,7 @@
             </div>
             <div class="table-scroll-wrapper">
                 <table class="crm-table">
-                    <thead><tr><th width="16%">Ad Soyad</th><th width="12%">Meslek/Şehir</th><th width="12%">Telefon</th><th width="10%">Yakınlık</th><th width="10%">Son Arama</th><th width="8%">Durum</th><th width="14%">Notlar</th><th width="18%">İşlem</th></tr></thead>
+                    <thead><tr><th>Ad Soyad</th><th>Meslek/Şehir</th><th>Tel</th><th>Yakınlık</th><th>Son Arama</th><th>Durum</th><th>Not</th><th>İşlem</th></tr></thead>
                     <tbody id="networkTableBody"></tbody>
                 </table>
             </div>
@@ -423,24 +418,15 @@
         </div>
         <div style="margin-bottom:15px;">
             <a href="https://www.tcmb.gov.tr/wps/wcm/connect/tr/tcmb+tr/main+page+site+area/bugun" target="_blank" class="tool-btn" style="width:100%; justify-content:center; text-align:center; background:#fef9e7; border:1px solid #f39c12; color:#d35400;"> TCMB Kurlarını Aç </a>
-            <div style="font-size:11px; color:#666; margin-top:5px; text-align:center;">*Otomatik değerler piyasa verisidir, manuel güncelleyebilirsiniz.</div>
         </div>
         <div class="currency-board">
             <div class="currency-row">
-                <span class="curr-flag">🇺🇸</span>
-                <span class="curr-name">USD / TRY</span>
-                <div>
-                    <div style="font-size:10px; color:#888;">Satış</div>
-                    <input type="number" id="usdRate" class="curr-input" style="width:80px; padding:5px; border:1px solid #ddd; border-radius:3px;">
-                </div>
+                <span class="curr-flag">🇺🇸 USD</span>
+                <div><input type="number" id="usdRate" class="curr-input" style="width:80px; padding:5px; border:1px solid #ddd; border-radius:3px;"></div>
             </div>
             <div class="currency-row">
-                <span class="curr-flag">🇪🇺</span>
-                <span class="curr-name">EUR / TRY</span>
-                <div>
-                    <div style="font-size:10px; color:#888;">Satış</div>
-                    <input type="number" id="eurRate" class="curr-input" style="width:80px; padding:5px; border:1px solid #ddd; border-radius:3px;">
-                </div>
+                <span class="curr-flag">🇪🇺 EUR</span>
+                <div><input type="number" id="eurRate" class="curr-input" style="width:80px; padding:5px; border:1px solid #ddd; border-radius:3px;"></div>
             </div>
         </div>
         <hr style="margin:15px 0; border:0; border-top:1px solid #eee;">
@@ -455,7 +441,7 @@
             </div>
         </div>
         <button class="btn-save" style="width:100%; margin-top:10px;" onclick="calculateCurrencyTotal()">HESAPLA (TL)</button>
-        <div id="currencyTotalRes" class="result-box" style="display:none;">
+        <div id="currencyTotalRes" class="result-box" style="margin-top:15px; padding:10px; background:#f0f9ff; text-align:center; font-weight:bold; display:none;">
             <span id="currResText">0,00 TL</span>
         </div>
     </div>
@@ -467,35 +453,26 @@
             <h3>🧾 Emlak Hesaplamaları</h3><span onclick="closeModal('realEstateCalcModal')" style="cursor:pointer;font-size:24px;">&times;</span>
         </div>
         <div class="tab-buttons">
-            <button class="tab-btn active" onclick="switchTab('tabTapu')">Tapu & Komisyon</button>
+            <button class="tab-btn active" onclick="switchTab('tabTapu')">Tapu & Kom.</button>
             <button class="tab-btn" onclick="switchTab('tabEmsal')">Emsal</button>
-            <button class="tab-btn" onclick="switchTab('tabVergi')">Emlak Vergisi</button>
+            <button class="tab-btn" onclick="switchTab('tabVergi')">Vergi</button>
         </div>
         <div id="tabTapu" class="tab-content active">
-            <div class="form-group"><label>Satış Bedeli (TL)</label><input type="number" id="calcPriceComp" placeholder="Örn: 5000000"></div>
+            <div class="form-group"><label>Satış Bedeli (TL)</label><input type="number" id="calcPriceComp" placeholder="5000000"></div>
             <button class="btn-save" style="width:100%; margin-top:10px;" onclick="calcTapuKomisyon()">HESAPLA</button>
-            <div id="resTapu" class="result-box" style="display:none; text-align:left; font-size:13px;"></div>
+            <div id="resTapu" style="margin-top:10px; font-size:13px; font-weight:bold; display:none;"></div>
         </div>
         <div id="tabEmsal" class="tab-content">
-            <div class="form-group"><label>Arsa Alanı (m²)</label><input type="number" id="calcArsaM2"></div>
-            <div class="form-group"><label>KAKS / Emsal Oranı</label><input type="number" id="calcKaks" placeholder="Örn: 1.5"></div>
+            <div class="form-group"><label>Arsa (m²)</label><input type="number" id="calcArsaM2"></div>
+            <div class="form-group"><label>KAKS / Emsal</label><input type="number" id="calcKaks" placeholder="1.5"></div>
             <button class="btn-save" style="width:100%; margin-top:10px;" onclick="calcEmsal()">HESAPLA</button>
-            <div id="resEmsal" class="result-box" style="display:none;"></div>
+            <div id="resEmsal" style="margin-top:10px; font-weight:bold; display:none;"></div>
         </div>
         <div id="tabVergi" class="tab-content">
-            <div class="form-group"><label>Emlak Türü</label></div>
-            <div style="display:flex; gap:10px; margin-bottom:10px;">
-                <select id="calcVergiType" style="flex:1;">
-                    <option value="0.002">Konut (B.Şehir - %0.2)</option>
-                    <option value="0.001">Konut (Normal - %0.1)</option>
-                    <option value="0.004">İşyeri (B.Şehir - %0.4)</option>
-                    <option value="0.002">İşyeri (Normal - %0.2)</option>
-                    <option value="0.006">Arsa (B.Şehir - %0.6)</option>
-                </select>
-            </div>
-            <div class="form-group"><label>Rayiç Bedel</label><input type="number" id="calcVergiDeger" placeholder="Bedel"></div>
-            <button class="btn-save" style="width:100%; margin-top:5px;" onclick="calcEmlakVergisi()">VERGİ HESAPLA</button>
-            <div id="resVergi" class="result-box" style="display:none;"></div>
+            <div class="form-group"><label>Tür</label><select id="calcVergiType"><option value="0.002">Konut (B.Şehir)</option><option value="0.004">İşyeri (B.Şehir)</option><option value="0.006">Arsa (B.Şehir)</option></select></div>
+            <div class="form-group"><label>Rayiç Bedel</label><input type="number" id="calcVergiDeger"></div>
+            <button class="btn-save" style="width:100%; margin-top:5px;" onclick="calcEmlakVergisi()">HESAPLA</button>
+            <div id="resVergi" style="margin-top:10px; font-weight:bold; display:none;"></div>
         </div>
     </div>
 </div>
@@ -598,7 +575,7 @@
         window.open(`https://www.google.com/search?q=${encodeURIComponent(dist + ' belediyesi imar durumu')}`, '_blank');
     }
 
-    // --- MEVCUT SİSTEM FONKSİYONLARI ---
+    // --- SİSTEM ---
     function handleCityChange(citySelectId, districtElemId, datalistId) {
         const city = document.getElementById(citySelectId).value;
         const distElem = document.getElementById(districtElemId); 
@@ -708,10 +685,15 @@
         setTimeout(function() { window.print(); setTimeout(function() { document.body.classList.remove('print-selected-mode'); }, 2000); }, 100);
     }
     
+    // GÜNCELLENEN WHATSAPP: FİLTRE ŞEHRİNİ ALIR
     function sendSelectedToWhatsapp() {
         const selectedCheckboxes = document.querySelectorAll('.row-selected input[type="checkbox"]');
         if(selectedCheckboxes.length === 0) { alert("Lütfen portföy seçin."); return; }
         let msg = "*📢 SEÇİLEN PORTFÖYLER*\n\n";
+        
+        // Filtredeki şehir seçimi
+        const filterCityVal = document.getElementById('filterCity').value;
+        
         selectedCheckboxes.forEach(cb => {
             const row = cb.closest('tr');
             const editBtn = row.querySelector('button[onclick^="editRecord"]');
@@ -721,7 +703,9 @@
                     const id = parseInt(idMatch[0]);
                     const item = portfolio.find(p => p.id === id);
                     if(item) {
-                        msg += `🏠 *${item.status} ${item.type}*\n📍 ${item.city} / ${item.district} / ${item.neighborhood}\n🔢 ${item.rooms} | 💰 ${item.price} ${item.currency||'₺'}\n-------------------\n`;
+                        // Eğer filtrede bir il seçiliyse onu kullan, yoksa verinin ilini kullan
+                        const cityToUse = (filterCityVal !== 'all') ? filterCityVal : (item.city || 'Antalya');
+                        msg += `🏠 *${item.status} ${item.type}*\n📍 ${cityToUse} / ${item.district} / ${item.neighborhood}\n🔢 ${item.rooms} | 💰 ${item.price} ${item.currency||'₺'}\n-------------------\n`;
                     }
                 }
             }
@@ -729,7 +713,6 @@
         window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
     }
     
-    // --- EXCEL EXPORT (v60'tan korunan özellik) ---
     function exportToExcel() {
         let table = document.getElementById("portfolioTable").cloneNode(true);
         for (let row of table.rows) {
@@ -831,10 +814,9 @@
                 }); 
             }
             
-            // v56 GÖRÜNÜMÜNE GERİ DÖNÜŞ (TD LABEL YOK)
             tbody.innerHTML += `
             <tr class="${rowClass}">
-                <td class="select-col-cell no-print"><input type="checkbox" onchange="toggleRowSelection(this)" style="transform:scale(1.3); cursor:pointer;"></td>
+                <td class="select-col-cell no-print"><input type="checkbox" onchange="toggleRowSelection(this)"></td>
                 <td><span class="badge ${badgeClass}">${item.status}</span><br><span class="badge ${ownBadgeClass}">${ownLabel}</span><br><span class="type-text">${item.type.toUpperCase()}</span></td>
                 <td>${cityDisplay}<b>${item.district}</b><br><small>${item.neighborhood}</small></td>
                 <td>${item.rooms}<br><small>${floorInfo}</small></td>
@@ -844,7 +826,7 @@
                 <td>${authHtml}</td>
                 <td class="no-print">${btnLinkHtml}</td>
                 <td class="no-print">${btnDesc}</td>
-                <td class="no-print"><button onclick="editRecord(${item.id})" style="background:#3498db;color:white;border:none;padding:5px 10px;border-radius:4px;cursor:pointer;">DÜZENLE</button></td>
+                <td class="no-print"><button onclick="editRecord(${item.id})" style="background:#3498db;color:white;border:none;padding:5px 10px;border-radius:4px;cursor:pointer;">✎</button></td>
                 <td class="print-only">${item.desc}</td>
             </tr>`;
         });
@@ -924,11 +906,11 @@
     function deleteCRMInvestor() { if(confirm('Sil?')) { crmData.investors = crmData.investors.filter(i => i.id !== crmEditingId); saveCRM(); renderInvestors(); resetCRMForm('investors'); } }
     function deleteCRMNetwork() { if(confirm('Sil?')) { crmData.network = crmData.network.filter(n => n.id !== crmEditingId); saveCRM(); renderNetwork(); resetCRMForm('network'); } }
     function resetCRMForm(type) { crmEditingId = null; if(type === 'investors') { document.querySelectorAll('#crmInvestors input, #crmInvestors textarea').forEach(i=>i.value=''); document.getElementById('btnInvSave').innerText = "KAYDET"; document.getElementById('btnInvDelete').style.display = "none"; } else { document.querySelectorAll('#crmNetwork input, #crmNetwork textarea').forEach(i=>i.value=''); document.getElementById('btnNetSave').innerText = "KAYDET"; document.getElementById('btnNetDelete').style.display = "none"; } }
+    
     function renderInvestors() { const tbody = document.getElementById('investorTableBody'); tbody.innerHTML = ''; crmData.investors.forEach(inv => { 
         let sClass = inv.status==='Sıcak'?'badge-sicak':(inv.status==='Ilık'?'badge-ilik':'badge-soguk'); 
         tbody.innerHTML += `<tr><td><b>${inv.name}</b></td><td>${inv.phone}</td><td>${inv.type}<br>${inv.region}</td><td>${inv.budget}</td><td><span class="badge ${sClass}">${inv.status}</span></td><td><small>${inv.note||'-'}</small></td><td><button onclick="editCRMInvestor(${inv.id})">✎</button></td></tr>`; }); }
     
-    // v56 SAYAÇ MANTIĞI
     function renderNetwork() { 
         const tbody = document.getElementById('networkTableBody'); tbody.innerHTML = ''; 
         const today = new Date();
@@ -936,14 +918,8 @@
             let lastCallDate = new Date(net.lastCall || today); 
             let diffTime = Math.abs(today - lastCallDate); 
             let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-            
             let statusBadge = '';
-            if(diffDays >= 45) {
-                statusBadge = `<span class="badge-crm-danger">📞 ARA</span>`;
-            } else {
-                statusBadge = `<span class="badge-crm-safe">${diffDays} Gün Oldu</span>`;
-            }
-
+            if(diffDays >= 45) { statusBadge = `<span class="badge-crm-danger">📞 ARA</span>`; } else { statusBadge = `<span class="badge-crm-safe">${diffDays} Gün Oldu</span>`; }
             tbody.innerHTML += `<tr><td><b>${net.name}</b></td><td>${net.job}<br><small>${net.city}</small></td><td>${net.phone}</td><td>${net.relation}</td><td>${net.lastCall}</td><td style="text-align:center;">${statusBadge}</td><td><small>${net.note||'-'}</small></td><td style="display:flex;gap:5px;justify-content:center;"><button onclick="resetNetworkTimer(${net.id})" style="font-size:11px;">📞 YAPTIM</button><button onclick="editCRMNetwork(${net.id})" style="font-size:11px;">✎</button></td></tr>`; 
         }); 
     }
