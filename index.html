@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KARACABAYRE.EST - v68 (Final Stable)</title>
+    <title>KARACABAYRE.EST - v68 (No Pass + Universal Backup)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -23,7 +23,7 @@
         }
         body { font-family: 'Segoe UI', sans-serif; background: #eef2f3; margin: 0; padding: 10px; color: #333; }
         
-        /* Ana Yapı - Şifre Ekranı Kaldırıldı */
+        /* Ana Yapı - Şifre Ekranı Yok, Direkt Görünür */
         #appContainer { display: block; }
         .container { max-width: 1800px; margin: 0 auto; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         
@@ -311,7 +311,7 @@
             </thead>
             <tbody id="tableBody"></tbody>
         </table>
-        <div class="legal-footer" style="margin-top:20px; font-size:12px; color:#aaa; text-align:center;">Veriler yerel tarayıcıda saklanır. (v68 Stable)</div>
+        <div class="legal-footer" style="margin-top:20px; font-size:12px; color:#aaa; text-align:center;">Veriler yerel tarayıcıda saklanır. (v68)</div>
     </div>
 </div>
 
@@ -540,7 +540,7 @@
         initImarLinks();
     };
 
-    // --- YENİDEN YAZILMIŞ AKILLI YÜKLEME MODÜLÜ (v68) ---
+    // --- YENİDEN YAZILMIŞ AKILLI YÜKLEME MODÜLÜ (v68 Fix) ---
     function saveToDisk() { 
         localStorage.setItem('KaracabayRE_EST_DB_v19', JSON.stringify(portfolio)); 
         localStorage.setItem('KaracabayRE_CRM_v19', JSON.stringify(crmData));
@@ -549,7 +549,6 @@
     }
     
     function downloadData() { 
-        // Verileri tek bir paket yap
         const d = { portfolio: portfolio, crm: crmData, checklist: checklist, imarLinks: imarLinks }; 
         const a = document.createElement('a'); 
         a.href = "data:text/plain;charset=utf-8," + encodeURIComponent(JSON.stringify(d)); 
@@ -565,36 +564,34 @@
                 const raw = e.target.result;
                 const d = JSON.parse(raw);
                 
-                if(confirm("DİKKAT: Mevcut veriler silinip yedek dosyası yüklensin mi?")) { 
-                    
-                    // --- FORMAT KONTROLÜ ---
-                    // Durum 1: Eski sürüm yedeği (v56 ve öncesi sadece Array formatındaydı)
-                    if (Array.isArray(d)) {
+                // --- FORMAT ALGILAMA ---
+                // Eski Format (Sadece Array)
+                if (Array.isArray(d)) {
+                    if(confirm("Eski format (v56) yedek dosyası algılandı. Yüklensin mi?")) {
                         portfolio = d;
-                        // Diğer verileri boş başlat (eski sürümde bunlar yoktu)
-                        if(!crmData || !crmData.investors) crmData = { investors: [], network: [] };
+                        if(!crmData.investors) crmData = { investors: [], network: [] };
                         if(!checklist) checklist = [];
                         if(!imarLinks) imarLinks = [];
-                        alert("Eski sürüm yedek dosyası algılandı ve başarıyla yüklendi.");
-                    } 
-                    // Durum 2: Yeni sürüm yedeği (Obje formatında: portfolio, crm, vb.)
-                    else if (d.portfolio || d.crm) {
-                        portfolio = d.portfolio || [];
-                        crmData = d.crm || { investors: [], network: [] };
-                        checklist = d.checklist || [];
-                        imarLinks = d.imarLinks || [];
-                        alert("Güncel sürüm yedek dosyası başarıyla yüklendi.");
-                    } 
-                    else {
-                        throw new Error("Dosya formatı tanınamadı!");
+                        saveToDisk();
+                        window.location.reload();
                     }
-
-                    // Verileri Kaydet ve Sayfayı Yenile
-                    saveToDisk();
-                    window.location.reload();
                 } 
+                // Yeni Format (Obje içinde portfolio, crm vb.)
+                else if (d.portfolio || d.crm) {
+                    if(confirm("Güncel format yedek dosyası algılandı. Yüklensin mi?")) {
+                        if(d.portfolio && Array.isArray(d.portfolio)) portfolio = d.portfolio;
+                        if(d.crm) crmData = d.crm;
+                        if(d.checklist) checklist = d.checklist;
+                        if(d.imarLinks) imarLinks = d.imarLinks;
+                        saveToDisk();
+                        window.location.reload();
+                    }
+                } 
+                else {
+                    alert("HATA: Dosya formatı tanınamadı. Lütfen geçerli bir yedek dosyası seçin.");
+                }
             } catch(err) { 
-                alert("Hata: Yedek dosyası bozuk veya uyumsuz! \n" + err); 
+                alert("Dosya okuma hatası: " + err); 
             }
             input.value = ''; 
         }; 
