@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KARACABAYRE.EST - v62 (Final Optimize)</title>
+    <title>KARACABAYRE.EST - v63 (Final Layout)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -46,7 +46,6 @@
         .btn-crm { background-color: var(--accent); }
         .btn-calc { background-color: var(--calc-color); }
         .btn-link { background-color: var(--link-color); }
-        .btn-excel { background-color: var(--excel); }
         .btn-backup { background: #f39c12; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 13px; }
         .notification-badge { position: absolute; top: -8px; right: -8px; background-color: red; color: white; border-radius: 50%; padding: 3px 6px; font-size: 10px; border: 2px solid white; display: none; }
 
@@ -59,18 +58,19 @@
         .currency-group select { width: 70px; flex-shrink: 0; background: #eee; font-weight: bold; }
         .auth-box { grid-column: span 2; display: flex; gap: 10px; background: #eafaf1; padding: 10px; border: 1px dashed var(--accent); border-radius: 6px; }
         
-        /* YENİ BUTON VE AÇIKLAMA DÜZENİ */
+        /* YENİ BUTON VE AÇIKLAMA DÜZENİ (İstenen Yapı) */
         .form-footer-row { grid-column: span 2; display: flex; align-items: flex-end; gap: 10px; margin-top: 5px; }
-        .desc-container { flex-grow: 1; }
-        .action-container { display: flex; gap: 5px; flex-shrink: 0; }
-        .btn-save { background: var(--accent); color: white; border: none; padding: 10px 25px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 14px; height: 42px; display: flex; align-items: center; justify-content: center; }
+        .desc-container { flex-grow: 1; } /* Açıklama alanı kalan boşluğu doldurur */
+        .action-container { flex-shrink: 0; display: flex; gap:5px; } /* Butonlar sağa yapışır */
+        
+        .btn-save { background: var(--accent); color: white; border: none; padding: 10px 30px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 14px; height: 42px; display: flex; align-items: center; justify-content: center; }
         .btn-delete-rec { background: var(--danger); color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer; font-weight: bold; display: none; height: 42px; }
         .btn-cancel { background: #7f8c8d; color: white; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; display: none; margin-left: auto; }
 
-        /* Tablo (v56 TARZI - SIKIŞTIRILMIŞ) */
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; table-layout: fixed; /* Tabloyu ekrana sığdırır */ }
+        /* Tablo */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; table-layout: fixed; }
         th { background: #34495e; color: white; padding: 8px 4px; text-align: left; vertical-align: middle; word-wrap: break-word; font-size: 11px; }
-        td { padding: 6px 4px; border-bottom: 1px solid #eee; vertical-align: top; word-wrap: break-word; /* İçeriği aşağı kaydırır */ }
+        td { padding: 6px 4px; border-bottom: 1px solid #eee; vertical-align: top; word-wrap: break-word; }
         tr:hover { background: #f9f9f9; }
         
         tr.row-sold { background-color: #fff5f5; color: #999; }
@@ -93,10 +93,12 @@
         .btn-clear-filter { background: #95a5a6; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; margin-left: auto; }
         .btn-print-selected { background: #8e44ad; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; display:flex; align-items:center; gap:5px; font-size: 11px; }
         .btn-whatsapp-selected { background: var(--whatsapp); color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; display:flex; align-items:center; gap:5px; font-size: 11px; }
+        /* Yeni Excel Butonu (Filtre İçinde) */
+        .btn-excel { background: #217346; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; display:flex; align-items:center; gap:5px; font-size: 11px; }
 
-        /* CRM Badges */
-        .badge-crm-safe { background: #27ae60; color:white; font-size:11px; padding:4px 8px; border-radius:4px; }
-        .badge-crm-danger { background: #c0392b; color:white; font-size:11px; font-weight:bold; padding:4px 8px; border-radius:4px; animation: pulse 2s infinite; }
+        /* CRM Badges (v56 Standartları) */
+        .badge-crm-safe { background: #27ae60; color:white; font-size:12px; padding:6px 10px; border-radius:4px; display:inline-block; min-width:80px; text-align:center; }
+        .badge-crm-danger { background: #c0392b; color:white; font-size:13px; font-weight:900; padding:6px 10px; border-radius:4px; display:inline-block; min-width:80px; text-align:center; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
         /* Modals */
@@ -120,6 +122,8 @@
         .tab-btn { flex: 1; padding: 10px; border: none; background: none; cursor: pointer; white-space: nowrap; border-bottom: 3px solid transparent; }
         .tab-btn.active { border-bottom-color: var(--secondary); color: var(--secondary); font-weight: bold; }
         .tab-content { display: none; } .tab-content.active { display: block; }
+        
+        /* CRM Özel Stiller (v56) */
         .crm-header { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; overflow-x: auto; }
         .crm-tab { padding: 10px 20px; cursor: pointer; font-weight: bold; border-radius: 6px; border: 1px solid #eee; background: #f9f9f9; white-space: nowrap; }
         .crm-tab.active { background: var(--accent); color: white; border-color: var(--accent); }
@@ -132,7 +136,6 @@
         @media screen and (max-width: 900px) {
             .form-footer-row { flex-direction: column; align-items: stretch; }
             .btn-save { width: 100%; margin-top: 5px; }
-            /* V56 tarzı sıkıştırma, scroll yok */
             .select-col-header, .select-col-cell { width: 20px !important; }
         }
 
@@ -152,7 +155,7 @@
 <div id="loginOverlay">
     <div class="login-box">
         <h2>🔒 GÜVENLİ GİRİŞ</h2>
-        <p>KaracabayRE.EST v62</p>
+        <p>KaracabayRE.EST v63</p>
         <input type="password" id="loginPin" placeholder="Şifre (1923)" inputmode="numeric">
         <button onclick="checkLogin()">GİRİŞ YAP</button>
     </div>
@@ -162,8 +165,8 @@
     <div class="container">
         <header>
             <div class="app-title-group">
-                <h1>🏢 KARACABAYRE.EST <span style="font-size:12px; color:#27ae60; border:1px solid #27ae60; padding:2px 8px; border-radius:10px; vertical-align:middle;">v62</span></h1>
-                <div class="app-subtitle">🏠 EMLAK ASİSTANI (FİNAL)</div>
+                <h1>🏢 KARACABAYRE.EST <span style="font-size:12px; color:#27ae60; border:1px solid #27ae60; padding:2px 8px; border-radius:10px; vertical-align:middle;">v63</span></h1>
+                <div class="app-subtitle">🏠 EMLAK ASİSTANI (OPTİMİZE)</div>
             </div>
             <div class="backup-controls">
                 <input type="file" id="fileUpload" style="display:none;" onclick="this.value=null" onchange="uploadData(this)">
@@ -184,7 +187,6 @@
             <button class="tool-btn btn-calc" onclick="openModal('realEstateCalcModal')"><i class="fa-solid fa-file-contract"></i> EMLAK</button>
             <a href="https://parselsorgu.tkgm.gov.tr/" target="_blank" class="tool-btn btn-link"><i class="fa-solid fa-map-location-dot"></i> TKGM</a>
             <button class="tool-btn btn-link" onclick="openModal('eImarModal'); renderImarButtons();"><i class="fa-solid fa-city"></i> BELEDİYE</button>
-            <button class="tool-btn btn-excel" onclick="exportToExcel()"><i class="fa-solid fa-file-excel"></i> EXCEL</button>
         </div>
 
         <div class="input-panel">
@@ -224,7 +226,6 @@
                     <div class="form-group" style="flex:1;"><label>Yetki Bitiş</label><input type="date" id="inpAuthEnd"></div>
                 </div>
                 <div class="form-group"><label>Müşteri Ad Soyad</label><input type="text" id="inpRef"></div>
-                
                 <div class="form-group"><label>Müşteri Telefon</label><input type="text" id="inpPhone" placeholder="0 (5XX)..." maxlength="17" oninput="formatPhone(this)"></div>
                 
                 <div class="form-group"><label>Dosya / Link</label><textarea id="inpLink" placeholder="Linkler..." rows="1" class="auto-expand" oninput="autoResize(this)"></textarea></div>
@@ -243,7 +244,7 @@
         </div>
 
         <div class="filter-bar">
-            <span>🔍</span> <input type="text" id="searchBox" placeholder="Ara..." onkeyup="renderTable()" style="width:100px;">
+            <span>🔍</span> <input type="text" id="searchBox" placeholder="Ara..." onkeyup="renderTable()" style="width:90px;">
             <select id="filterOwnership" onchange="renderTable()"><option value="all">Tüm</option><option>BANA AİT</option><option>PAYLAŞIMLI</option></select>
             <select id="filterType" onchange="renderTable()"><option value="all">Tüm Tür</option></select>
             <select id="filterStatus" onchange="renderTable()"><option value="all">Durum</option><option>Satılık</option><option>Kiralık</option><option>Devren</option><option style="color:red;">Satıldı</option><option style="color:red;">Kiralandı</option></select>
@@ -252,15 +253,19 @@
                 </select>
             
             <select id="filterDistrict" onchange="loadMahalleler('filterCity', 'filterDistrict', 'dl_mahalle_filtre'); renderTable();"><option value="all">İlçe</option></select>
-            <input type="text" list="dl_mahalle_filtre" id="filterNeighborhood" placeholder="Mahalle" onkeyup="renderTable()" style="width:80px;" autocomplete="off"><datalist id="dl_mahalle_filtre"></datalist>
+            <input type="text" list="dl_mahalle_filtre" id="filterNeighborhood" placeholder="Mahalle" onkeyup="renderTable()" style="width:70px;" autocomplete="off"><datalist id="dl_mahalle_filtre"></datalist>
             
             <input type="text" id="filterRooms" placeholder="Oda" onkeyup="renderTable()" style="width:50px;">
             <input type="text" id="filterMinPrice" placeholder="Min" oninput="formatCurrency(this); renderTable()" style="width:60px;"> 
             <input type="text" id="filterMaxPrice" placeholder="Max" oninput="formatCurrency(this); renderTable()" style="width:60px;">
             <button class="btn-clear-filter" onclick="clearFilters()"><i class="fa-solid fa-rotate-left"></i></button>
             
+            <button class="btn-excel" onclick="exportToExcel()">
+                <i class="fa-solid fa-file-excel"></i> KAYDET EXCEL
+            </button>
+            
             <button class="btn-print-selected" onclick="printSelected()">
-                <i class="fa-solid fa-check-double"></i> YAZ
+                <i class="fa-solid fa-file-pdf"></i> YAZDIR PDF
             </button>
             <button class="btn-whatsapp-selected" onclick="sendSelectedToWhatsapp()">
                 <i class="fa-brands fa-whatsapp"></i> WP
@@ -288,7 +293,7 @@
             </thead>
             <tbody id="tableBody"></tbody>
         </table>
-        <div class="legal-footer" style="margin-top:20px; font-size:12px; color:#aaa; text-align:center;">Veriler yerel tarayıcıda saklanır. (v62)</div>
+        <div class="legal-footer" style="margin-top:20px; font-size:12px; color:#aaa; text-align:center;">Veriler yerel tarayıcıda saklanır. (v63)</div>
     </div>
 </div>
 
@@ -322,7 +327,7 @@
 <div id="crmModal" class="modal" onclick="closeModalOutside(event, 'crmModal')">
     <div class="modal-content">
         <div style="display:flex;justify-content:space-between; margin-bottom:10px;">
-            <h3>👥 CRM</h3>
+            <h3>👥 Müşteri İlişkileri (CRM)</h3>
             <span onclick="closeModal('crmModal')" style="cursor:pointer;font-size:24px;">&times;</span>
         </div>
         <div class="crm-header">
@@ -331,13 +336,13 @@
         </div>
         <div id="crmInvestors" class="crm-section" style="display:block;">
             <div class="crm-input-panel">
-                <div class="crm-input-grid" style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));">
+                <div class="crm-input-grid" style="grid-template-columns: repeat(4, 1fr);">
                     <div class="form-group"><label>Ad Soyad</label><input type="text" id="invName"></div>
-                    <div class="form-group"><label>Telefon</label><input type="text" id="invPhone" oninput="formatPhone(this)" maxlength="17"></div>
+                    <div class="form-group"><label>Telefon</label><input type="text" id="invPhone" placeholder="05XX..." oninput="formatPhone(this)"></div>
                     <div class="form-group"><label>Talep Tipi</label><select id="invType"><option>Daire</option><option>Villa</option><option>Arsa</option><option>İşyeri</option><option>Yatırımlık</option></select></div>
-                    <div class="form-group"><label>Bölge</label><input type="text" id="invRegion"></div>
-                    <div class="form-group"><label>Bütçe</label><input type="text" id="invBudget" oninput="formatCurrency(this)"></div>
-                    <div class="form-group"><label>Durum</label><select id="invStatus"><option value="Sıcak">🔥 Sıcak</option><option value="Ilık">⚖️ Ilık</option><option value="Soğuk">🧊 Soğuk</option></select></div>
+                    <div class="form-group"><label>Bölge Tercihi</label><input type="text" id="invRegion" placeholder="Lara, Konyaaltı..."></div>
+                    <div class="form-group"><label>Bütçe (Max)</label><input type="text" id="invBudget" oninput="formatCurrency(this)"></div>
+                    <div class="form-group"><label>Durum</label><select id="invStatus"><option value="Sıcak">🔥 Sıcak (Acil)</option><option value="Ilık">⚖️ Ilık (Normal)</option><option value="Soğuk">🧊 Soğuk (Beklemede)</option></select></div>
                     <div class="form-group" style="grid-column: span 2;"><label>Notlar</label><textarea id="invNote" rows="1" class="auto-expand"></textarea></div>
                 </div>
                 <div class="crm-buttons">
@@ -348,21 +353,21 @@
             </div>
             <div class="table-scroll-wrapper">
                 <table class="crm-table">
-                    <thead><tr><th>Ad Soyad</th><th>Tel</th><th>Talep</th><th>Bütçe</th><th>Durum</th><th>Not</th><th>İşlem</th></tr></thead>
+                    <thead><tr><th width="15%">Ad Soyad</th><th width="12%">Telefon</th><th width="20%">Talep / Bölge</th><th width="13%">Bütçe</th><th width="10%">Durum</th><th width="20%">Notlar</th><th width="10%">İşlem</th></tr></thead>
                     <tbody id="investorTableBody"></tbody>
                 </table>
             </div>
         </div>
         <div id="crmNetwork" class="crm-section" style="display:none;">
             <div class="crm-input-panel">
-                <div class="crm-input-grid" style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));">
+                <div class="crm-input-grid" style="grid-template-columns: repeat(3, 1fr);">
                     <div class="form-group"><label>Ad Soyad</label><input type="text" id="netName"></div>
-                    <div class="form-group"><label>Telefon</label><input type="text" id="netPhone" oninput="formatPhone(this)" maxlength="17"></div>
-                    <div class="form-group"><label>Meslek</label><input type="text" id="netJob"></div>
+                    <div class="form-group"><label>Telefon</label><input type="text" id="netPhone" oninput="formatPhone(this)"></div>
+                    <div class="form-group"><label>Meslek / Unvan</label><input type="text" id="netJob"></div>
                     <div class="form-group"><label>Şehir</label><input type="text" id="netCity" value="Antalya"></div>
-                    <div class="form-group"><label>Yakınlık</label><input type="text" id="netRelation"></div>
+                    <div class="form-group"><label>Yakınlık / Ref.</label><input type="text" id="netRelation" placeholder="Arkadaş, Eski Müşteri..."></div>
                     <div class="form-group"><label>Son Arama</label><input type="date" id="netLastCall"></div>
-                    <div class="form-group" style="grid-column: span 2;"><label>Notlar</label><textarea id="netNote" rows="1" class="auto-expand"></textarea></div>
+                    <div class="form-group" style="grid-column: span 3;"><label>Açıklama / Potansiyel</label><textarea id="netNote" rows="1" class="auto-expand"></textarea></div>
                 </div>
                 <div class="crm-buttons">
                     <button class="btn-save" onclick="saveCRMNetwork()" id="btnNetSave">KAYDET</button>
@@ -372,7 +377,7 @@
             </div>
             <div class="table-scroll-wrapper">
                 <table class="crm-table">
-                    <thead><tr><th>Ad Soyad</th><th>Meslek/Şehir</th><th>Tel</th><th>Yakınlık</th><th>Son Arama</th><th>Durum</th><th>Not</th><th>İşlem</th></tr></thead>
+                    <thead><tr><th width="16%">Ad Soyad</th><th width="12%">Meslek/Şehir</th><th width="12%">Telefon</th><th width="10%">Yakınlık</th><th width="10%">Son Arama</th><th width="8%">Durum</th><th width="14%">Notlar</th><th width="18%">İşlem</th></tr></thead>
                     <tbody id="networkTableBody"></tbody>
                 </table>
             </div>
@@ -685,7 +690,7 @@
         setTimeout(function() { window.print(); setTimeout(function() { document.body.classList.remove('print-selected-mode'); }, 2000); }, 100);
     }
     
-    // GÜNCELLENEN WHATSAPP: FİLTRE ŞEHRİNİ ALIR
+    // WHATSAPP GÜNCELLEMESİ (Net m2 ve İl Filtresi)
     function sendSelectedToWhatsapp() {
         const selectedCheckboxes = document.querySelectorAll('.row-selected input[type="checkbox"]');
         if(selectedCheckboxes.length === 0) { alert("Lütfen portföy seçin."); return; }
@@ -703,9 +708,9 @@
                     const id = parseInt(idMatch[0]);
                     const item = portfolio.find(p => p.id === id);
                     if(item) {
-                        // Eğer filtrede bir il seçiliyse onu kullan, yoksa verinin ilini kullan
                         const cityToUse = (filterCityVal !== 'all') ? filterCityVal : (item.city || 'Antalya');
-                        msg += `🏠 *${item.status} ${item.type}*\n📍 ${cityToUse} / ${item.district} / ${item.neighborhood}\n🔢 ${item.rooms} | 💰 ${item.price} ${item.currency||'₺'}\n-------------------\n`;
+                        // NET M2 BİLGİSİ EKLENDİ
+                        msg += `🏠 *${item.status} ${item.type}*\n📍 ${cityToUse} / ${item.district} / ${item.neighborhood}\n🔢 ${item.rooms} | 📏 NET ${item.net} m² | 💰 ${item.price} ${item.currency||'₺'}\n-------------------\n`;
                     }
                 }
             }
@@ -713,19 +718,46 @@
         window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
     }
     
+    // EXCEL EXPORT (Filtreli Veriyi Alır)
     function exportToExcel() {
-        let table = document.getElementById("portfolioTable").cloneNode(true);
-        for (let row of table.rows) {
-            row.deleteCell(10); 
-            row.deleteCell(9); 
-            row.deleteCell(8); 
-            row.deleteCell(0); 
-            for(let cell of row.cells) {
-                let text = cell.innerText.replace(/\n/g, ' ').trim();
-                cell.innerText = text;
+        // Tabloyu kopyala (butonları vb. hariç tutmak için)
+        let originalTable = document.getElementById("portfolioTable");
+        let tableClone = originalTable.cloneNode(true);
+        
+        // Sadece görünür satırları al (Filtreye uygun olanlar)
+        // Orijinal tablodaki satırların display özelliğini kontrol et
+        // Ancak cloneNode stili kopyalamaz, bu yüzden manuel bir filtreleme yaparız
+        
+        // Clone üzerinde temizlik
+        for (let i = tableClone.rows.length - 1; i >= 0; i--) {
+            let row = tableClone.rows[i];
+            
+            // Eğer header değilse ve orijinal tabloda bu satır gizliyse (display:none), Excel'den çıkar
+            if(i > 0) { // Header hariç
+                // Orijinal satırı bul (index değişmediği için aynı indexte olmalı, ama tbody içinde)
+                // Daha güvenli yol: Orijinal tablonun rows koleksiyonuna bakmak
+                 let originalRow = originalTable.rows[i];
+                 if(originalRow.style.display === 'none') {
+                     tableClone.deleteRow(i);
+                     continue;
+                 }
+            }
+            
+            // Hücre temizliği (Butonları sil)
+            if(row.cells.length > 0) {
+               row.deleteCell(10); // İşlem
+               row.deleteCell(9);  // Not
+               row.deleteCell(8);  // Link
+               row.deleteCell(0);  // Checkbox
+               
+               // İçerik temizliği
+               for(let cell of row.cells) {
+                   cell.innerText = cell.innerText.replace(/\n/g, ' ').trim();
+               }
             }
         }
-        let html = table.outerHTML;
+
+        let html = tableClone.outerHTML;
         let uri = 'data:application/vnd.ms-excel;base64,' + btoa(unescape(encodeURIComponent('<meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">' + html)));
         let link = document.createElement("a");
         link.href = uri;
@@ -898,33 +930,57 @@
         const fL=document.getElementById('inpFloor'); floorList.forEach(f=>fL.innerHTML+=`<option>${f}</option>`); 
     }
 
-    // CRM
+    // CRM (v56 Logic - Restore Edildi)
     function openCRM() { openModal('crmModal'); renderInvestors(); renderNetwork(); document.getElementById('netLastCall').valueAsDate = new Date(); }
-    function switchCRMTab(tab) { document.querySelectorAll('.crm-section').forEach(s => s.style.display = 'none'); document.querySelectorAll('.crm-tab').forEach(t => t.classList.remove('active')); if(tab === 'investors') { document.getElementById('crmInvestors').style.display = 'block'; document.getElementById('tab1').classList.add('active'); } else { document.getElementById('crmNetwork').style.display = 'block'; document.getElementById('tab2').classList.add('active'); } }
+    function switchCRMTab(tab) { document.querySelectorAll('.crm-section').forEach(s => s.style.display = 'none'); document.querySelectorAll('.crm-tab').forEach(t => t.classList.remove('active')); if(tab === 'investors') { document.getElementById('crmInvestors').style.display = 'block'; document.getElementById('tab1').classList.add('active'); } else { document.getElementById('crmNetwork').style.display = 'block'; document.getElementById('tab2').classList.add('active'); } resetCRMForm('investors'); resetCRMForm('network'); }
+    
     function saveCRMInvestor() { const inv = { id: crmEditingId ? crmEditingId : Date.now(), name: document.getElementById('invName').value, phone: document.getElementById('invPhone').value, type: document.getElementById('invType').value, region: document.getElementById('invRegion').value, budget: document.getElementById('invBudget').value, status: document.getElementById('invStatus').value, note: document.getElementById('invNote').value }; if(!inv.name) return; if(crmEditingId) crmData.investors[crmData.investors.findIndex(i => i.id === crmEditingId)] = inv; else crmData.investors.push(inv); saveCRM(); renderInvestors(); resetCRMForm('investors'); }
     function saveCRMNetwork() { const net = { id: crmEditingId ? crmEditingId : Date.now(), name: document.getElementById('netName').value, phone: document.getElementById('netPhone').value, job: document.getElementById('netJob').value, city: document.getElementById('netCity').value, relation: document.getElementById('netRelation').value, lastCall: document.getElementById('netLastCall').value || new Date().toISOString().split('T')[0], note: document.getElementById('netNote').value }; if(!net.name) return; if(crmEditingId) crmData.network[crmData.network.findIndex(n => n.id === crmEditingId)] = net; else crmData.network.push(net); saveCRM(); renderNetwork(); resetCRMForm('network'); }
     function deleteCRMInvestor() { if(confirm('Sil?')) { crmData.investors = crmData.investors.filter(i => i.id !== crmEditingId); saveCRM(); renderInvestors(); resetCRMForm('investors'); } }
     function deleteCRMNetwork() { if(confirm('Sil?')) { crmData.network = crmData.network.filter(n => n.id !== crmEditingId); saveCRM(); renderNetwork(); resetCRMForm('network'); } }
-    function resetCRMForm(type) { crmEditingId = null; if(type === 'investors') { document.querySelectorAll('#crmInvestors input, #crmInvestors textarea').forEach(i=>i.value=''); document.getElementById('btnInvSave').innerText = "KAYDET"; document.getElementById('btnInvDelete').style.display = "none"; } else { document.querySelectorAll('#crmNetwork input, #crmNetwork textarea').forEach(i=>i.value=''); document.getElementById('btnNetSave').innerText = "KAYDET"; document.getElementById('btnNetDelete').style.display = "none"; } }
+    function resetCRMForm(type) { crmEditingId = null; if(type === 'investors') { document.querySelectorAll('#crmInvestors input, #crmInvestors textarea').forEach(i=>i.value=''); document.getElementById('btnInvSave').innerText = "KAYDET"; document.getElementById('btnInvDelete').style.display = "none"; } else { document.querySelectorAll('#crmNetwork input, #crmNetwork textarea').forEach(i=>i.value=''); document.getElementById('netCity').value = 'Antalya'; document.getElementById('netLastCall').valueAsDate = new Date(); document.getElementById('btnNetSave').innerText = "KAYDET"; document.getElementById('btnNetDelete').style.display = "none"; } }
+
+    function renderInvestors() { 
+        const tbody = document.getElementById('investorTableBody'); tbody.innerHTML = ''; 
+        crmData.investors.forEach(inv => { 
+            let sClass = inv.status==='Sıcak'?'badge-sicak':(inv.status==='Ilık'?'badge-ilik':'badge-soguk'); 
+            tbody.innerHTML += `<tr><td><b>${inv.name}</b></td><td>${inv.phone}</td><td>${inv.type} - ${inv.region}</td><td>${inv.budget} TL</td><td><span class="badge ${sClass}">${inv.status}</span></td><td><small>${inv.note || '-'}</small></td><td><button onclick="editCRMInvestor(${inv.id})">DÜZENLE</button></td></tr>`; 
+        }); 
+    }
     
-    function renderInvestors() { const tbody = document.getElementById('investorTableBody'); tbody.innerHTML = ''; crmData.investors.forEach(inv => { 
-        let sClass = inv.status==='Sıcak'?'badge-sicak':(inv.status==='Ilık'?'badge-ilik':'badge-soguk'); 
-        tbody.innerHTML += `<tr><td><b>${inv.name}</b></td><td>${inv.phone}</td><td>${inv.type}<br>${inv.region}</td><td>${inv.budget}</td><td><span class="badge ${sClass}">${inv.status}</span></td><td><small>${inv.note||'-'}</small></td><td><button onclick="editCRMInvestor(${inv.id})">✎</button></td></tr>`; }); }
-    
+    // CRM Network (v56 Logic: 45 gün uyarısı)
     function renderNetwork() { 
-        const tbody = document.getElementById('networkTableBody'); tbody.innerHTML = ''; 
-        const today = new Date();
+        const tbody = document.getElementById('networkTableBody'); tbody.innerHTML = ''; const today = new Date(); 
         crmData.network.forEach(net => { 
             let lastCallDate = new Date(net.lastCall || today); 
             let diffTime = Math.abs(today - lastCallDate); 
             let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+            
             let statusBadge = '';
-            if(diffDays >= 45) { statusBadge = `<span class="badge-crm-danger">📞 ARA</span>`; } else { statusBadge = `<span class="badge-crm-safe">${diffDays} Gün Oldu</span>`; }
-            tbody.innerHTML += `<tr><td><b>${net.name}</b></td><td>${net.job}<br><small>${net.city}</small></td><td>${net.phone}</td><td>${net.relation}</td><td>${net.lastCall}</td><td style="text-align:center;">${statusBadge}</td><td><small>${net.note||'-'}</small></td><td style="display:flex;gap:5px;justify-content:center;"><button onclick="resetNetworkTimer(${net.id})" style="font-size:11px;">📞 YAPTIM</button><button onclick="editCRMNetwork(${net.id})" style="font-size:11px;">✎</button></td></tr>`; 
+            if(diffDays >= 45) {
+                statusBadge = `<span class="badge-crm-danger">📞 ARA</span>`;
+            } else {
+                statusBadge = `<span class="badge-crm-safe">${diffDays} Gün Oldu</span>`;
+            }
+
+            tbody.innerHTML += `
+            <tr>
+                <td><b>${net.name}</b></td>
+                <td>${net.job}<br><small>${net.city}</small></td>
+                <td>${net.phone}</td>
+                <td>${net.relation}</td>
+                <td>${net.lastCall}</td>
+                <td style="text-align:center;">${statusBadge}</td>
+                <td><small>${net.note || '-'}</small></td>
+                <td style="display:flex; gap:5px; justify-content:center;">
+                    <button onclick="resetNetworkTimer(${net.id})" style="background:#3498db; color:white; border:none; padding:4px 8px; border-radius:3px; cursor:pointer; font-size:11px;">📞 GÖRÜŞTÜM</button>
+                    <button onclick="editCRMNetwork(${net.id})" style="background:#f39c12; color:white; border:none; padding:4px 8px; border-radius:3px; cursor:pointer; font-size:11px;">DÜZENLE</button>
+                </td>
+            </tr>`; 
         }); 
     }
-    
-    function resetNetworkTimer(id) { if(confirm("Görüşme yapıldı olarak işaretlensin mi?")) { const idx = crmData.network.findIndex(n => n.id === id); if(idx > -1) { crmData.network[idx].lastCall = new Date().toISOString().split('T')[0]; saveCRM(); renderNetwork(); } } }
+
+    function resetNetworkTimer(id) { if(confirm("Görüşme yapıldı olarak işaretlensin mi? Tarih bugün olacak.")) { const idx = crmData.network.findIndex(n => n.id === id); if(idx > -1) { crmData.network[idx].lastCall = new Date().toISOString().split('T')[0]; saveCRM(); renderNetwork(); } } }
     function editCRMInvestor(id) { const i = crmData.investors.find(x => x.id === id); if(!i) return; crmEditingId = id; document.getElementById('invName').value = i.name; document.getElementById('invPhone').value = i.phone; document.getElementById('invType').value = i.type; document.getElementById('invRegion').value = i.region; document.getElementById('invBudget').value = i.budget; document.getElementById('invStatus').value = i.status; document.getElementById('invNote').value = i.note; document.getElementById('btnInvSave').innerText = "GÜNCELLE"; document.getElementById('btnInvDelete').style.display = "inline-block"; }
     function editCRMNetwork(id) { const n = crmData.network.find(x => x.id === id); if(!n) return; crmEditingId = id; document.getElementById('netName').value = n.name; document.getElementById('netPhone').value = n.phone; document.getElementById('netJob').value = n.job; document.getElementById('netCity').value = n.city; document.getElementById('netRelation').value = n.relation; document.getElementById('netNote').value = n.note; document.getElementById('netLastCall').value = n.lastCall; document.getElementById('btnNetSave').innerText = "GÜNCELLE"; document.getElementById('btnNetDelete').style.display = "inline-block"; }
     function saveCRM() { localStorage.setItem('KaracabayRE_CRM_v19', JSON.stringify(crmData)); }
